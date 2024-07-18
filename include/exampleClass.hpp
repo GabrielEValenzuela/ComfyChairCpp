@@ -1,0 +1,23 @@
+/*
+ * ComfyChair 
+ * Copyright (C) 2024, M. Venturino, G. Valenzuela
+ * July 13, 2024.
+ *
+ * MIT License
+ */
+
+#ifndef EXAMPLECLASS_HPP
+#define EXAMPLECLASS_HPP
+
+class ExampleClass
+{
+public:
+    ExampleClass() = default;
+    
+    /**
+     * @brief Prints "Hello World!" to the console.
+     */
+    void printHelloWorld();
+};
+
+#endif // EXAMPLECLASS_HPP
