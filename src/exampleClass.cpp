@@ -1,5 +1,5 @@
 /*
- * ComfyChair 
+ * ComfyChair
  * Copyright (C) 2024, M. Venturino, G. Valenzuela
  * July 13, 2024.
  *
@@ -11,5 +11,5 @@
 
 void ExampleClass::printHelloWorld()
 {
-    std::cout<<"Hello world!"<<std::endl;
+    std::cout << "Hello world!" << std::endl;
 }

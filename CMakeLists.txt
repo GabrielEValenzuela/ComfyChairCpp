@@ -20,7 +20,7 @@ include(FetchContent)
 set(GTEST_GIT_URL "https://github.com/google/googletest.git") # Download gtest from github
 set(NLOHMANN_JSON_GIT_URL "https://github.com/nlohmann/json.git") # Download nlohmann/json from github
 
-# FetchContent_Declare is a CMake function that downloads the content of a git repository 
+# FetchContent_Declare is a CMake function that downloads the content of a git repository
 # and stores it in the build directory.
 FetchContent_Declare(
   nlohmann_json

@@ -1,5 +1,5 @@
 /*
- * ComfyChair 
+ * ComfyChair
  * Copyright (C) 2024, M. Venturino, G. Valenzuela
  * July 13, 2024.
  *
@@ -11,9 +11,9 @@
 
 class ExampleClass
 {
-public:
+  public:
     ExampleClass() = default;
-    
+
     /**
      * @brief Prints "Hello World!" to the console.
      */

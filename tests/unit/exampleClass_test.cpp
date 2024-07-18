@@ -1,5 +1,5 @@
 /*
- * ComfyChair 
+ * ComfyChair
  * Copyright (C) 2024, M. Venturino, G. Valenzuela
  * July 13, 2024.
  *
@@ -10,12 +10,12 @@
 
 void ExampleClassTest::SetUp()
 {
-    
+
 }
 
 void ExampleClassTest::TearDown()
 {
-    
+
 }
 
 TEST_F(ExampleClassTest, TestSuccessfulMessage)
