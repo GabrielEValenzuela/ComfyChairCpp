@@ -15,6 +15,9 @@
 class ExampleClass
 {
   public:
+    /**
+     * @brief Default constructor.
+     */
     ExampleClass() = default;
 
     /**
