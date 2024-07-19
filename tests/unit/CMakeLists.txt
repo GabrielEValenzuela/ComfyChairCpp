@@ -1,13 +1,17 @@
-cmake_minimum_required(VERSION 3.12.4)
+cmake_minimum_required(VERSION 3.25)
 
 project(comfy_chair_unit_tests)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-g --coverage -fsanitize=address,leak,undefined")
-
 file(GLOB PROJECT_SOURCES
-    *.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
     ${CMAKE_SOURCE_DIR}/src/*[!main]*.cpp
 )
+
+message("Here ${CMAKE_CXX_FLAGS}")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g --coverage -fsanitize=address,leak,undefined")
+
+message("Here2 ${CMAKE_CXX_FLAGS}")
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 

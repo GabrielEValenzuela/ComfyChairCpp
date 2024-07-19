@@ -20,6 +20,8 @@ include(FetchContent)
 set(GTEST_GIT_URL "https://github.com/google/googletest.git") # Download gtest from github
 set(NLOHMANN_JSON_GIT_URL "https://github.com/nlohmann/json.git") # Download nlohmann/json from github
 
+set(FETCHCONTENT_QUIET OFF)
+
 # FetchContent_Declare is a CMake function that downloads the content of a git repository
 # and stores it in the build directory.
 FetchContent_Declare(
@@ -28,15 +30,6 @@ FetchContent_Declare(
   SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/nlohmann_json
   GIT_TAG v3.11.2
 )
-
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY ${GTEST_GIT_URL}
-        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../external/googletest
-        GIT_TAG release-1.12.0  # Optionally pin to a stable release
-)
-
-FetchContent_MakeAvailable(googletest)
 
 FetchContent_MakeAvailable(nlohmann_json)
 
@@ -51,7 +44,16 @@ add_executable(${PROJECT_NAME} ${COMFY_CHAIR_SRC})
 
 # To run testing and coverage, run cmake with -DRUN_COVERAGE=1
 if (RUN_COVERAGE EQUAL 1)
-  target_compile_options(${PROJECT_NAME} PUBLIC -g -O0 -Wall -Wextra -pedantic -Werror)
+
+  FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY ${GTEST_GIT_URL}
+  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest
+  GIT_TAG v1.14.0  # Optionally pin to a stable release
+  )
+
+  FetchContent_MakeAvailable(googletest)
+
   add_subdirectory(tests)
 else()
   target_compile_options(${PROJECT_NAME} PRIVATE -O3)

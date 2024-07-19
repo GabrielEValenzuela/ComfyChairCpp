@@ -4,3 +4,6 @@ SOURCE_FILES+=$(find $PROJECT_PATH/include -type f \( -name "*.cpp" -or -name "*
 
 echo "Running style"
 clang-format -i $SOURCE_FILES
+
+path=$(pwd)
+lcov --capture --directory build/tests/unit --output-file build/coverage.info -rc lcov_branch_coverage=0 --include=$path/src/exampleClass.cpp

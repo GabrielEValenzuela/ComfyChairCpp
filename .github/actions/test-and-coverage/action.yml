@@ -42,10 +42,6 @@ runs:
             arguments+="--directory build/tests/component "
           fi
 
-          if [[ -d "build/tests" ]]; then
-            arguments+="--directory build/tests "
-          fi
-
           # Set output file
           arguments+="--output-file build/coverage.info "
 
@@ -54,7 +50,7 @@ runs:
 
           # Include test files
           include_files=""
-          for file in $(find src/ include/ -type f -regextype posix-extended -regex ".*/*\.(hpp|cpp|h|c)")
+          for file in $(find src/ include/ -type f -regextype posix-extended -regex ".*/*\.(cpp|h|c)" ! -name "main.cpp")
           do
             include_files+="--include=$(pwd)$dir/$file "
           done
