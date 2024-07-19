@@ -24,12 +24,13 @@ runs:
           # Generate documentation
           sudo dot -c
 
-          ERROR_FILE_FLAG=${{ inputs.path }}/dox_errors.txt
+          ERROR_FILE_FLAG=${{ inputs.path }}/DoxyErrors.txt
 
           doxygen -s ${CONFIG_FILE} 2> ${ERROR_FILE_FLAG}
 
           if [ -s $ERROR_FILE_FLAG ]; then
               echo "Error: There are some files that are not documented correctly"
+              cat $ERROR_FILE_FLAG
               exit 1
           else
               echo "All files are documented correctly. Niiiceee"
@@ -40,7 +41,7 @@ runs:
       if: failure()
       with:
         name: Doxygen errors!!!
-        path: ${{ inputs.path }}/dox_errors.txt
+        path: ${{ inputs.path }}/DoxyErrors.txt
         retention-days: 1
 
     - uses: actions/upload-artifact@v4

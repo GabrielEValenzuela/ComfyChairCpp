@@ -9,6 +9,9 @@
 #ifndef EXAMPLECLASS_HPP
 #define EXAMPLECLASS_HPP
 
+/*
+* @brief ExampleClass is a simple class that prints "Hello World!" to the console.
+*/
 class ExampleClass
 {
   public:
