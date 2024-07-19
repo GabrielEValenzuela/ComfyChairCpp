@@ -4,4 +4,3 @@ SOURCE_FILES+=$(find $PROJECT_PATH/include -type f \( -name "*.cpp" -or -name "*
 
 echo "Running style"
 clang-format -i $SOURCE_FILES
-
