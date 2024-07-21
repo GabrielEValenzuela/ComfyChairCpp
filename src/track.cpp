@@ -16,17 +16,74 @@ Track::Track(const std::string& trackName, const std::shared_ptr<ITrackState>& s
 
 void Track::addArticle(const std::shared_ptr<Article>& article)
 {
-    m_currentState->handleArticle(m_articles, article, OperationType::Create);
+    try
+    {
+        m_currentState->handleArticle(m_articles, article, OperationType::Create);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 void Track::updateArticle(const std::shared_ptr<Article>& article)
 {
-    m_currentState->handleArticle(m_articles, article, OperationType::Update);
+    try
+    {
+        m_currentState->handleArticle(m_articles, article, OperationType::Update);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 void Track::removeArticle(const std::shared_ptr<Article>& article)
 {
-    m_currentState->handleArticle(m_articles, article, OperationType::Delete);
+    try
+    {
+        m_currentState->handleArticle(m_articles, article, OperationType::Delete);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
+
+void Track::addBid(const std::shared_ptr<Article>& article, BiddingInterest interest)
+{
+    try
+    {
+        m_currentState->handleBidding(m_articleBidding, article, interest, OperationType::Create);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
+
+void Track::updateBid(const std::shared_ptr<Article>& article, BiddingInterest interest)
+{
+    try
+    {
+        m_currentState->handleBidding(m_articleBidding, article, interest, OperationType::Update);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
+
+void Track::removeBid(const std::shared_ptr<Article>& article)
+{
+    try
+    {
+        m_currentState->handleBidding(m_articleBidding, article, BiddingInterest::NotInterested, OperationType::Delete);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 const std::string& Track::trackName() const

@@ -13,6 +13,7 @@
 #include "trackStateInterface.hpp"
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 /**
@@ -58,6 +59,12 @@ class Track
      */
     void removeArticle(const std::shared_ptr<Article>& article);
 
+    void addBid(const std::shared_ptr<Article>& article, BiddingInterest interest);
+
+    void updateBid(const std::shared_ptr<Article>& article, BiddingInterest interest);
+
+    void removeBid(const std::shared_ptr<Article>& article);
+
     /**
      * @brief Get the track's name.
      * @return The track's name.
@@ -87,6 +94,8 @@ class Track
     std::vector<std::shared_ptr<User>> m_users;               //< The users in the track.
     std::vector<std::shared_ptr<Article>> m_selectedArticles; //< The selected articles in the track.
     std::shared_ptr<ITrackState> m_currentState;              //< The track's state.
+    std::unordered_map<std::shared_ptr<Article>, BiddingInterest>
+        m_articleBidding; //< Relation between article and bidding interest.
 };
 
 #endif // TRACK_HPP

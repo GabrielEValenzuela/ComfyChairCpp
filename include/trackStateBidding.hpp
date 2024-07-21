@@ -1,21 +1,21 @@
 /*
  * ComfyChair
  * Copyright (C) 2024, M. Venturino, G. Valenzuela
- * July 20, 2024.
+ * July 21, 2024.
  *
  * MIT License
  */
 
-#ifndef TRACK_STATE_RECEPTION_HPP
-#define TRACK_STATE_RECEPTION_HPP
+#ifndef TRACK_STATE_BIDDING_HPP
+#define TRACK_STATE_BIDDING_HPP
 
 #include "track.hpp"
 #include "trackStateInterface.hpp"
 
 /**
- * @brief ITrackState is an interface class that defines the methods that a track must implement.
+ * @brief Bidding state class that represents the state of a track in the conference.
  */
-class ReceptionStateTrack : public ITrackState
+class BiddingStateTrack : public ITrackState
 {
   public:
     /**
@@ -46,22 +46,25 @@ class ReceptionStateTrack : public ITrackState
     const std::string& stateName() override;
 
   private:
-    std::shared_ptr<Track> m_track;       // The track that the state is managing.
-    std::string m_stateName{"Reception"}; // The state's name.
+    std::string m_stateName{"Bidding"}; // The state's name.
 
     /**
-     * @brief Updates an article in the track.
-     * @param articles The list of articles to modify.
-     * @param article The article to update.
+     * @brief Updates an bidding in the track.
+     * @param interestMap The map of articles and their bidding interests.
+     * @param article The article.
+     * @param interest The interest to set.
      */
-    void updateArticle(std::vector<std::shared_ptr<Article>>& articles, const std::shared_ptr<Article>& article);
+    void updateBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
+                       const std::shared_ptr<Article>& article, BiddingInterest interest);
 
     /**
-     * @brief Removes an article from the track.
-     * @param articles The list of articles to modify.
-     * @param article The article to remove.
+     * @brief Removes an bidding from the map.
+     * @param interestMap The map of articles and their bidding interests.
+     * @param article The article.
+     * @param interest The interest to remove.
      */
-    void removeArticle(std::vector<std::shared_ptr<Article>>& articles, const std::shared_ptr<Article>& article);
+    void removeBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
+                       const std::shared_ptr<Article>& article, BiddingInterest interest);
 };
 
 #endif // TRACK_STATE_INTERFACE_HPP

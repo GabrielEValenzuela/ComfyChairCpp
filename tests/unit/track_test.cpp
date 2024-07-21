@@ -9,7 +9,10 @@
 #include "track_test.hpp"
 #include "MockArticle.hpp"
 #include "MockTrackState.hpp"
+#include "articlePoster.hpp"
+#include "articleRegular.hpp"
 #include "track.hpp"
+#include "trackStateBidding.hpp"
 #include "trackStateInterface.hpp"
 #include "trackStateReception.hpp"
 
@@ -75,6 +78,38 @@ TEST_F(TrackTest, UpdateArticle)
 
     // Action
     track.updateArticle(article);
+}
+
+TEST_F(TrackTest, UpdateArticlePoster)
+{
+    // Setup
+    auto mockState = std::make_shared<ReceptionStateTrack>();
+    Track track;
+    track.establishState(mockState); // Assuming this method sets the current state
+
+    auto article = std::make_shared<ArticlePoster>(); // Assuming default constructor exists
+    track.addArticle(article);
+
+    // Action
+    track.updateArticle(article);
+
+    EXPECT_EQ(track.amountArticles(), 1);
+}
+
+TEST_F(TrackTest, UpdateArticleRegular)
+{
+    // Setup
+    auto mockState = std::make_shared<ReceptionStateTrack>();
+    Track track;
+    track.establishState(mockState); // Assuming this method sets the current state
+
+    auto article = std::make_shared<ArticleRegular>(); // Assuming default constructor exists
+    track.addArticle(article);
+
+    // Action
+    track.updateArticle(article);
+
+    EXPECT_EQ(track.amountArticles(), 1);
 }
 
 TEST_F(TrackTest, UpdateArticleNotFound)
@@ -154,4 +189,75 @@ TEST_F(TrackTest, ReceptionStateTest)
 
     track.removeArticle(article);
     EXPECT_EQ(track.amountArticles(), 0);
+}
+
+TEST_F(TrackTest, BiddingStateTest)
+{
+    // Setup
+    auto mockState = std::make_shared<ReceptionStateTrack>();
+    Track track;
+    track.establishState(mockState); // Assuming this method sets the current state
+
+    testing::internal::CaptureStdout();
+    track.currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Reception' state\n");
+    outputCurrentState.clear();
+
+    auto article = std::make_shared<Article>(); // Assuming default constructor exists
+
+    // Action
+    track.addArticle(article);
+    EXPECT_EQ(track.amountArticles(), 1);
+
+    testing::internal::CaptureStderr();
+    track.addBid(article, BiddingInterest::NotInterested);
+
+    outputCurrentState = testing::internal::GetCapturedStderr();
+
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
+
+    testing::internal::CaptureStderr();
+    track.updateBid(article, BiddingInterest::Maybe);
+
+    outputCurrentState = testing::internal::GetCapturedStderr();
+
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
+
+    testing::internal::CaptureStderr();
+    track.removeBid(article);
+    outputCurrentState = testing::internal::GetCapturedStderr();
+
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
+
+    // Move to bidding
+    auto bidingMock = std::make_shared<BiddingStateTrack>();
+    track.establishState(bidingMock); // Assuming this method sets the current state
+
+    testing::internal::CaptureStdout();
+    track.currentState();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Bidding' state\n");
+
+    testing::internal::CaptureStderr();
+    track.addArticle(article);
+    outputCurrentState = testing::internal::GetCapturedStderr();
+
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
+
+    testing::internal::CaptureStderr();
+    track.updateArticle(article);
+    outputCurrentState = testing::internal::GetCapturedStderr();
+
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
+
+    testing::internal::CaptureStderr();
+    track.removeArticle(article);
+    outputCurrentState = testing::internal::GetCapturedStderr();
+
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
+
+    track.addBid(article, BiddingInterest::NotInterested);
+    track.updateBid(article, BiddingInterest::Maybe);
+    track.removeBid(article);
 }

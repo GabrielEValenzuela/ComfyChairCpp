@@ -43,6 +43,11 @@ class MockTrackState : public ITrackState
      */
     MOCK_METHOD(void, handleArticle,
                 (std::vector<std::shared_ptr<Article>>&, const std::shared_ptr<Article>&, OperationType), (override));
+    MOCK_METHOD(void, handleBidding,
+                ((std::unordered_map<std::shared_ptr<Article>, BiddingInterest>&), const std::shared_ptr<Article>&,
+                 BiddingInterest, OperationType),
+                (override));
+
     MOCK_METHOD(const std::string&, stateName, (), (override));
 };
 

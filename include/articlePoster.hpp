@@ -26,9 +26,9 @@ class ArticlePoster : public Article
   public:
     /**
      * @brief Default constructor.
-     * @note Deleted to avoid its use.
+     * @note Avoid its use.
      */
-    ArticlePoster() = delete;
+    ArticlePoster() = default;
 
     /**
      * @brief Constructor.

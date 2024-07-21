@@ -69,3 +69,10 @@ void ReceptionStateTrack::removeArticle(std::vector<std::shared_ptr<Article>>& a
     }
     // LCOV_EXCL_STOP
 }
+
+void ReceptionStateTrack::handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
+                                        const std::shared_ptr<Article>& article, BiddingInterest interest,
+                                        OperationType operation)
+{
+    throw TrackStateException("Bidding is not allowed in reception state");
+}
