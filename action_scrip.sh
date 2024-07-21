@@ -14,6 +14,7 @@ ERROR_FILE_FLAG=./DoxyErrors.txt
 doxygen -s ${CONFIG_FILE} 2>${ERROR_FILE_FLAG}
 
 cd build
+cmake -GNinja -DRUN_COVERAGE=1 ..
 ninja
 ctest tests
 cd ..
