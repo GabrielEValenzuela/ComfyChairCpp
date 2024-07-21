@@ -81,5 +81,5 @@ TEST_F(ArticleTest, RegularArticleCreation)
     article.display();
     auto outputCurrentState = testing::internal::GetCapturedStdout();
     EXPECT_STREQ(outputCurrentState.c_str(), "Title: Visualizing Big Data\nAuthors: Jane Smith, Bruce Wayne\nURL: "
-                                             "https://bit.ly/example\nSecond Attachment: https://bit.ly/example2\n");
+                                             "https://bit.ly/example\nAbstract: An amazing paper!\n");
 }
