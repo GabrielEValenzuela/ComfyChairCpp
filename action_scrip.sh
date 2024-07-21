@@ -7,6 +7,8 @@ echo "Running style"
 clang-format -i $SOURCE_FILES
 echo "Running clang-format -i $SOURCE_FILES"
 
+pre-commit run --all-files
+
 ERROR_FILE_FLAG=./DoxyErrors.txt
 
 doxygen -s ${CONFIG_FILE} 2>${ERROR_FILE_FLAG}

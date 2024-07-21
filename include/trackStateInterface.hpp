@@ -13,24 +13,6 @@
 #include <memory>
 #include <string>
 
-struct Bid
-{
-    std::string bidName;
-    std::string bidDescription;
-    std::string bidAuthor;
-    std::string bidDate;
-    std::string bidAmount;
-};
-
-struct Review
-{
-    std::string reviewName;
-    std::string reviewDescription;
-    std::string reviewAuthor;
-    std::string reviewDate;
-    std::string reviewScore;
-};
-
 enum class OperationType
 {
     Create,

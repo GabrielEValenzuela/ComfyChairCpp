@@ -15,6 +15,9 @@
 #include <string>
 #include <vector>
 
+/**
+ * @brief Track class that represents a track in the conference.
+ */
 class Track
 {
   public:

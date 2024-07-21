@@ -15,11 +15,6 @@
 #include <string>
 #include <vector>
 
-struct User
-{
-    int id;
-};
-
 /**
  * @class Article
  * @brief Represents an article in a conference or publication system.
@@ -61,9 +56,9 @@ class Article
     virtual void display() const;
 
   protected:
-    std::string m_title;                // The article's name.
-    std::string m_attachedUrl;          // The article's URL.
-    std::vector<std::string> m_authors; // The users that have access to the article.
+    std::string m_title;                ///< The article's name.
+    std::string m_attachedUrl;          ///< The article's URL.
+    std::vector<std::string> m_authors; ///< The users that have access to the article.
 };
 
 #endif // ARTICLE_INTERFACE_HPP
