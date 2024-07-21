@@ -59,10 +59,24 @@ class Track
      */
     void removeArticle(const std::shared_ptr<Article>& article);
 
+    /**
+     * @brief Adds a bid to an article.
+     * @param article The article to bid.
+     * @param interest The interest to set.
+     */
     void addBid(const std::shared_ptr<Article>& article, BiddingInterest interest);
 
+    /**
+     * @brief Updates a bid to an article.
+     * @param article The article to bid.
+     * @param interest The interest to set.
+     */
     void updateBid(const std::shared_ptr<Article>& article, BiddingInterest interest);
 
+    /**
+     * @brief Removes a bid from an article.
+     * @param article The article to bid.
+     */
     void removeBid(const std::shared_ptr<Article>& article);
 
     /**
