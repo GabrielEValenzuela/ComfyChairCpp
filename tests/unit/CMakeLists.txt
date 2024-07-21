@@ -10,6 +10,7 @@ file(GLOB PROJECT_SOURCES
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g --coverage -fsanitize=address,leak,undefined")
 
+include_directories(${CMAKE_SOURCE_DIR}/tests/mocks)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 

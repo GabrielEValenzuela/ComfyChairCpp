@@ -6,11 +6,7 @@
  * MIT License
  */
 
-#include "exampleClass.hpp"
-
 int main()
 {
-    auto example = ExampleClass();
-    example.printHelloWorld();
-    return 0;
+    // ToDo: Add logic to receive a JSON file and run the system.
 }

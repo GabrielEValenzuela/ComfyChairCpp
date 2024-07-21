@@ -18,7 +18,7 @@
  */
 class ExampleClassTest : public ::testing::Test
 {
-protected:
+  protected:
     // LCOV_EXCL_START
     ExampleClassTest() = default;
     ~ExampleClassTest() = default;
