@@ -36,6 +36,7 @@ class Track
     /**
      * @brief Adds an article to the track.
      * @param article The article to add.
+     * @param operation Operation to perform.
      */
     virtual void handleTrackArticle(const std::shared_ptr<Article>& article, OperationType operation) = 0;
 
@@ -43,6 +44,7 @@ class Track
      * @brief Adds a bid to an article.
      * @param article The article to bid.
      * @param interest The interest to set.
+     * @param operation Operation to perform.
      */
     virtual void handleTrackBidding(const std::shared_ptr<Article>& article, BiddingInterest interest,
                                     OperationType operation) = 0;
@@ -51,6 +53,7 @@ class Track
      * @brief Adds a review to an article.
      * @param article The article to review.
      * @param review The review to set. //Todo Define the parameter once review class is implemented.
+     * @param operation Operation to perform.
      */
     virtual void handleTrackReview(const std::shared_ptr<Article>& article, const std::string& review,
                                    OperationType operation) = 0;
