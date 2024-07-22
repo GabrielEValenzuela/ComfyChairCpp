@@ -19,7 +19,6 @@ void UserTest::TearDown()
 
 TEST_F(UserTest, UserCreation)
 {
-
     const auto& jsonUser = R"(
     {
             "fullNames": "Martin Venturino",
@@ -28,7 +27,9 @@ TEST_F(UserTest, UserCreation)
             "password": "https://bit.ly/example2"
     }
     )"_json;
+
     auto user = std::make_shared<User>(jsonUser);
+
     EXPECT_TRUE(user != nullptr);
     EXPECT_EQ(user->getFullNames(), "Martin Venturino");
 }

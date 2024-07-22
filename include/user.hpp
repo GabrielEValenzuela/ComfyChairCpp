@@ -32,19 +32,6 @@ class User
     explicit User(const nlohmann::json& userJson);
 
     /**
-     * @brief Constructor.
-     * @param fullNames The full name of the user.
-     * @param affiliation The affiliation of the user.
-     * @param email The email of the user.
-     * @param password The password of the user.
-     */
-    User(const std::string& fullNames, const std::string& affiliation, const std::string& email,
-         const std::string& password)
-        : m_fullNames(fullNames), m_affiliation(affiliation), m_email(email), m_password(password)
-    {
-    }
-
-    /**
      * @brief Destructor.
      */
     virtual ~User() = default;

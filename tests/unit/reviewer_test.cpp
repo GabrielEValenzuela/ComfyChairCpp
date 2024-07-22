@@ -12,6 +12,16 @@
 
 void ReviewerTest::SetUp()
 {
+    const auto& jsonUser = R"(
+    {
+            "fullNames": "Martin Venturino",
+            "affiliation": "Tecnicas y herramientas",
+            "email": "marven@tyh.com",
+            "password": "https://bit.ly/example2"
+    }
+    )"_json;
+
+    reviewer = std::make_shared<Reviewer>(jsonUser);
 }
 
 void ReviewerTest::TearDown()
@@ -20,16 +30,12 @@ void ReviewerTest::TearDown()
 
 TEST_F(ReviewerTest, ReviewerCreation)
 {
-
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
-
     EXPECT_TRUE(reviewer != nullptr);
-    EXPECT_EQ(reviewer->getFullNames(), "fullNames");
+    EXPECT_EQ(reviewer->getFullNames(), "Martin Venturino");
 }
 
 TEST_F(ReviewerTest, ReviewerAddBid)
 {
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
 
     auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
     reviewer->bid(bid, OperationType::Create);
@@ -40,7 +46,6 @@ TEST_F(ReviewerTest, ReviewerAddBid)
 
 TEST_F(ReviewerTest, ReviewerRemoveBid)
 {
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
 
     auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
     reviewer->bid(bid, OperationType::Create);
@@ -57,7 +62,6 @@ TEST_F(ReviewerTest, ReviewerRemoveBid)
 
 TEST_F(ReviewerTest, ReviewerUpdateBid)
 {
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
 
     auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
     reviewer->bid(bid, OperationType::Create);
@@ -72,7 +76,6 @@ TEST_F(ReviewerTest, ReviewerUpdateBid)
 
 TEST_F(ReviewerTest, ReviewerAddReview)
 {
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
 
     auto review = std::make_shared<Review>(
         "Visualizing Big Data",
@@ -90,7 +93,6 @@ TEST_F(ReviewerTest, ReviewerAddReview)
 
 TEST_F(ReviewerTest, ReviewerDeleteReview)
 {
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
 
     auto review = std::make_shared<Review>(
         "Visualizing Big Data",
@@ -111,7 +113,6 @@ TEST_F(ReviewerTest, ReviewerDeleteReview)
 
 TEST_F(ReviewerTest, ReviewerUpdateReview)
 {
-    auto reviewer = std::make_shared<Reviewer>("fullNames", "affiliation", "email", "password");
 
     auto review = std::make_shared<Review>(
         "Visualizing Big Data",

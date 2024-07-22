@@ -31,14 +31,9 @@ class Reviewer : public User
 
     /**
      * @brief Constructor.
-     * @param fullNames The full name of the reviewer.
-     * @param affiliation The affiliation of the reviewer.
-     * @param email The email of the reviewer.
-     * @param password The password of the reviewer.
+     * @param userJson Represents the reviewer's information, in a JSON format.
      */
-    Reviewer(const std::string& fullNames, const std::string& affiliation, const std::string& email,
-             const std::string& password)
-        : User(fullNames, affiliation, email, password){};
+    Reviewer(const nlohmann::json& userJson) : User(userJson){};
 
     /**
      * @brief Destructor.

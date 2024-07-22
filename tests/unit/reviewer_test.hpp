@@ -9,7 +9,10 @@
 #ifndef REVIEWER_TEST_HPP
 #define REVIEWER_TEST_HPP
 
+#include "bid.hpp"
+#include "reviewer.hpp"
 #include "gtest/gtest.h"
+#include <memory>
 
 /**
  * @brief Runs unit tests for Reviewer.
@@ -34,6 +37,8 @@ class ReviewerTest : public ::testing::Test
      */
     void TearDown() override;
     // LCOV_EXCL_STOP
+
+    std::shared_ptr<Reviewer> reviewer;
 };
 
 #endif // REVIEWER_TEST_HPP
