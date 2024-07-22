@@ -16,7 +16,7 @@
 #include "trackStateBidding.hpp"
 #include "trackStateInterface.hpp"
 #include "trackStateReception.hpp"
-#include <bid.hpp>
+#include "bid.hpp"
 
 void TrackTest::SetUp()
 {
