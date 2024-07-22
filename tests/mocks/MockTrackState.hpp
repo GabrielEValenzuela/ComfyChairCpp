@@ -11,8 +11,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-#include "bid.hpp"
 #include "articleInterface.hpp"
+#include "bid.hpp"
 #include "nlohmann/json.hpp"
 #include "trackStateInterface.hpp"
 #include <memory>
