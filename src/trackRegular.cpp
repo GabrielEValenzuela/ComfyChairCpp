@@ -8,6 +8,7 @@
 
 #include "trackRegular.hpp"
 #include "articleRegular.hpp"
+#include "bid.hpp"
 #include "trackStateReception.hpp"
 
 TrackRegular::TrackRegular(const nlohmann::json& trackData)

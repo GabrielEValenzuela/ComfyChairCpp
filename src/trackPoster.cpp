@@ -9,6 +9,7 @@
 #include "trackPoster.hpp"
 #include "articlePoster.hpp"
 #include "trackStateReception.hpp"
+#include <bid.hpp>
 
 TrackPoster::TrackPoster(const nlohmann::json& trackData)
 {

@@ -14,6 +14,7 @@
 #include "articleInterface.hpp"
 #include "nlohmann/json.hpp"
 #include "trackStateInterface.hpp"
+#include "user.hpp"
 #include <memory>
 
 /**

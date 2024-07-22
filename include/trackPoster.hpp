@@ -10,6 +10,7 @@
 #define TRACK_POSTER_HPP
 
 #include "track.hpp"
+#include "user.hpp"
 
 /**
  * @brief Track class that represents a track in the conference.
