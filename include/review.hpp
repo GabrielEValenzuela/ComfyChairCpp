@@ -12,6 +12,21 @@
 #include <string>
 
 /**
+ * @enum Rating
+ * @brief Enum class that represents the rating of a review.
+ */
+enum class Rating
+{
+    Excellent,
+    VeryGood,
+    Good,
+    Neutral,
+    Bad,
+    VeryBad,
+    NotRecommended,
+};
+
+/**
  * @class Review
  * @brief Review class that represents a review in the conference.
  */
@@ -30,7 +45,7 @@ class Review
      * @param text The text of the review.
      * @param rating The rating of the review.
      */
-    Review(const std::string& titleArticle, const std::string& text, int rating)
+    Review(const std::string& titleArticle, const std::string& text, Rating rating)
         : m_titleArticle(titleArticle), m_text(text), m_rating(rating)
     {
     }
@@ -62,15 +77,24 @@ class Review
      * @brief Getter for the rating of the review.
      * @return The rating of the review.
      */
-    int getRating() const
+    Rating getRating() const
     {
         return m_rating;
+    }
+
+    /**
+     * @brief Setter for the rating of the review.
+     * @param rating The new rating for the review.
+     */
+    void setRating(Rating rating)
+    {
+        m_rating = rating;
     }
 
   private:
     std::string m_titleArticle;
     std::string m_text;
-    int m_rating;
+    Rating m_rating;
 };
 
 #endif // REVIEW_HPP

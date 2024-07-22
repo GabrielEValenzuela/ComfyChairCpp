@@ -10,8 +10,8 @@
 
 User::User(const nlohmann::json& userJson)
 {
-    m_fullNames = userJson.value("m_fullNames", "");
-    m_afiliation = userJson.value("m_afilation", "");
-    m_email = userJson.value("m_email", "");
-    m_password = userJson.value("m_password", "");
+    m_fullNames = userJson.value("fullNames", "");
+    m_affiliation = userJson.value("affiliation", "");
+    m_email = userJson.value("email", "");
+    m_password = userJson.value("password", "");
 }

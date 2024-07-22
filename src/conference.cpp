@@ -16,20 +16,26 @@
 
 Conference::Conference(const nlohmann::json& conferenceJson)
 {
-    for (const auto& chairListJson : conferenceJson["chairs"])
+    /*
+    if (conferenceJson.contains("chairs"))
     {
-        for (const auto& chairJson : chairListJson)
+        std::cout << conferenceJson["chairs"] << std::endl;
+        for (const auto& chairListJson : conferenceJson["chairs"])
         {
-            m_chairs.push_back(std::make_shared<User>(chairJson));
+            for (const auto& chairJson : chairListJson)
+            {
+                m_chairs.push_back(std::make_shared<User>(chairJson));
+            }
         }
     }
+
     for (const auto& authorListJson : conferenceJson["authors"])
     {
         for (const auto& authorJson : authorListJson)
         {
             m_authors.push_back(std::make_shared<User>(authorJson));
         }
-    }
+    }*/
     m_createdAt = parseDate(conferenceJson.value("createdAt", ""));
 }
 

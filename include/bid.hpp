@@ -67,6 +67,19 @@ class Bid
         return m_bidType;
     }
 
+    /**
+     * @brief Setter for the bid type.
+     * @param bidType The new bid type.
+     */
+    /**
+     * @brief Setter for the bidding interest.
+     * @param interest The new bidding interest.
+     */
+    void setBiddingInterest(BiddingInterest interest)
+    {
+        m_bidType = interest;
+    }
+
   private:
     std::string m_titleArticle;
     BiddingInterest m_bidType;

@@ -118,6 +118,15 @@ class Conference
         m_selectionStart = timePoint;
     }
 
+    /**
+     * @brief Get the chairs.
+     * @return A vector of shared pointers to User objects representing the chairs.
+     */
+    std::vector<std::shared_ptr<User>> getChairs() const
+    {
+        return m_chairs;
+    }
+
   private:
     std::chrono::system_clock::time_point parseDate(const std::string& dateStr);
     std::vector<std::shared_ptr<User>> m_chairs;

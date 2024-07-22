@@ -11,6 +11,7 @@
 
 #include "bid.hpp"
 #include "review.hpp"
+#include "trackStateInterface.hpp"
 #include "user.hpp"
 #include <memory>
 #include <vector>
@@ -30,9 +31,14 @@ class Reviewer : public User
 
     /**
      * @brief Constructor.
-     * @param reviewerJson Represents the user's information, in a JSON format.
+     * @param fullNames The full name of the reviewer.
+     * @param affiliation The affiliation of the reviewer.
+     * @param email The email of the reviewer.
+     * @param password The password of the reviewer.
      */
-    explicit Reviewer(const nlohmann::json& reviewerJson);
+    Reviewer(const std::string& fullNames, const std::string& affiliation, const std::string& email,
+             const std::string& password)
+        : User(fullNames, affiliation, email, password){};
 
     /**
      * @brief Destructor.
@@ -58,22 +64,26 @@ class Reviewer : public User
     }
 
     /**
-     * @brief Add a bid.
-     * @param bid The bid to add.
+     * @brief Places a bid on an item.
+     *
+     * This method is used to place a bid on an item. The bid is represented by a shared pointer to a `Bid` object.
+     * The `operation` parameter specifies the type of operation to be performed on the bid.
+     *
+     * @param bid A shared pointer to a `Bid` object representing the bid to be placed.
+     * @param operation The type of operation to be performed on the bid.
      */
-    void addBid(const std::shared_ptr<Bid>& bid)
-    {
-        m_bids.push_back(bid);
-    }
+    void bid(const std::shared_ptr<Bid>& bid, OperationType operation);
 
     /**
-     * @brief Add a review.
-     * @param review The review to add.
+     * @brief Performs a review operation on the given review.
+     *
+     * This method is responsible for performing a review operation on the provided review object.
+     * The review operation can be specified using the `operation` parameter.
+     *
+     * @param review A shared pointer to the review object to be reviewed.
+     * @param operation The type of review operation to be performed.
      */
-    void addReview(const std::shared_ptr<Review>& review)
-    {
-        m_reviews.push_back(review);
-    }
+    void review(const std::shared_ptr<Review>& review, OperationType operation);
 
   private:
     std::vector<std::shared_ptr<Bid>> m_bids;
