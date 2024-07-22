@@ -6,22 +6,22 @@
  * MIT License
  */
 
-#ifndef _EXAMPLE_CLASS_TEST_HPP
-#define _EXAMPLE_CLASS_TEST_HPP
+#ifndef ARTICLE_TEST_HPP
+#define ARTICLE_TEST_HPP
 
-#include "exampleClass.hpp"
+#include "articleInterface.hpp"
 #include "gtest/gtest.h"
 
 /**
  * @brief Runs unit tests for ExampleClass.
  *
  */
-class ExampleClassTest : public ::testing::Test
+class ArticleTest : public ::testing::Test
 {
   protected:
     // LCOV_EXCL_START
-    ExampleClassTest() = default;
-    ~ExampleClassTest() = default;
+    ArticleTest() = default;
+    ~ArticleTest() = default;
 
     /**
      * @brief Set the environment for testing.
@@ -37,4 +37,4 @@ class ExampleClassTest : public ::testing::Test
     // LCOV_EXCL_STOP
 };
 
-#endif // _EXAMPLE_CLASS_TEST_HPP
+#endif // ARTICLE_TEST_HPP

@@ -10,12 +10,10 @@
 
 void ExampleClassTest::SetUp()
 {
-
 }
 
 void ExampleClassTest::TearDown()
 {
-
 }
 
 TEST_F(ExampleClassTest, TestSuccessfulMessage)

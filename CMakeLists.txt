@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 project(
   "ComfyChairC++"
@@ -38,6 +38,7 @@ file(GLOB COMFY_CHAIR_SRC
     "src/*.cpp"
     )
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/nlohmann_json/include)
 
 add_executable(${PROJECT_NAME} ${COMFY_CHAIR_SRC})
 
