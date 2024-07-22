@@ -44,9 +44,21 @@ class ArticleRegular : public Article
     void updateFields(const std::shared_ptr<Article>& article) override;
 
     /**
+     * @brief Get the article's title
+     * @return The article's title.
+     */
+    const std::string& articleName() const override;
+
+    /**
      * @brief Display poster article information.
      */
     void display() const override;
+
+    /**
+     * @brief Check if the regular article is valid.
+     * A regular article is valid if has a title, attached file, and abstract with at least 300 characters.
+     */
+    bool isValid() const override;
 
   private:
     std::string m_abstract;

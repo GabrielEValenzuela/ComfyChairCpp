@@ -7,7 +7,6 @@
  */
 
 #include "articleInterface.hpp"
-#include <ranges>
 
 Article::Article(const nlohmann::json& articleJson)
 {
@@ -23,11 +22,6 @@ void Article::updateFields(const std::shared_ptr<Article>& article)
     m_authors = article->m_authors;
 }
 
-const std::string& Article::articleName() const
-{
-    return m_title;
-}
-
 void Article::display() const
 {
     std::cout << "Title: " << m_title << std::endl;
@@ -40,5 +34,5 @@ void Article::display() const
     std::cout << *last; // Print the last author without a trailing comma
 
     std::cout << std::endl;
-    std::cout << "URL: " << m_attachedUrl << std::endl;
+    std::cout << "Attached URL: " << m_attachedUrl << std::endl;
 }

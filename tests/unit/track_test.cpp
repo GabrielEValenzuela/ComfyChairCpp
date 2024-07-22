@@ -12,6 +12,7 @@
 #include "articlePoster.hpp"
 #include "articleRegular.hpp"
 #include "track.hpp"
+#include "trackFactory.hpp"
 #include "trackStateBidding.hpp"
 #include "trackStateInterface.hpp"
 #include "trackStateReception.hpp"
@@ -24,240 +25,426 @@ void TrackTest::TearDown()
 {
 }
 
-TEST_F(TrackTest, ConstructorInitializesProperties)
+TEST_F(TrackTest, FactoryTest)
 {
-    auto state = std::make_shared<MockTrackState>();
-    std::vector<std::shared_ptr<User>> users; // Assuming User class with mocks or real instances
+    const auto& jsonTrackGeneric = R"( { "trackTopic": "Track SW Engineering" } )"_json;
 
-    const std::string expectedState{"Initial State"};
+    auto trackRegular = TrackFactory::createTrack(jsonTrackGeneric, TrackType::Regular);
+    auto trackWorkshop = TrackFactory::createTrack(jsonTrackGeneric, TrackType::Workshop);
+    auto trackPoster = TrackFactory::createTrack(jsonTrackGeneric, TrackType::Poster);
 
-    auto track = std::make_unique<Track>("AI Conference", state, users);
+    EXPECT_TRUE(trackRegular != nullptr);
+    EXPECT_TRUE(trackWorkshop != nullptr);
+    EXPECT_TRUE(trackPoster != nullptr);
+}
 
-    // Trigger behavior that uses the mock object's methods if not used in constructor
-    // Assuming `currentState()` method that uses `stateName()`
-    EXPECT_EQ(track->trackName(), "AI Conference");
+TEST_F(TrackTest, RegularTrack)
+{
+    // Crate the JSON input
+    const auto& jsonTrackRegular = R"(
+    {
+            "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
+
+    // Create the track
+    auto trackRegular = TrackFactory::createTrack(jsonTrackRegular, TrackType::Regular);
+
+    // Validate topic name
+    EXPECT_STREQ(trackRegular->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
     testing::internal::CaptureStdout();
-    // Setting expectations before the object that uses it is created
-    EXPECT_CALL(*state, stateName()).WillOnce(testing::ReturnRef(expectedState));
-    track->currentState();
+    trackRegular->currentState();
     auto outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Initial State' state\n");
-}
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Reception' state\n");
 
-TEST_F(TrackTest, AddArticle)
-{
-    // Setup
-    auto mockState = std::make_shared<MockTrackState>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
 
-    auto article = std::make_shared<Article>(); // Assuming default constructor exists
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
 
-    // Expectation: handleArticle should be called with the correct parameters
-    EXPECT_CALL(*mockState, handleArticle(testing::_, testing::Eq(article), testing::Eq(OperationType::Create)))
-        .Times(1) // handleArticle should be called exactly once
-        .WillOnce(testing::Return());
+    EXPECT_TRUE(articleRegular->isValid());
 
-    // Action
-    track.addArticle(article);
-}
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
 
-TEST_F(TrackTest, UpdateArticle)
-{
-    // Setup
-    auto mockState = std::make_shared<MockTrackState>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegular = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
 
-    auto article = std::make_shared<Article>(); // Assuming default constructor exists
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegularNonValid = std::make_shared<ArticleRegular>(jsonArticleRegular);
 
-    // Expectation: handleArticle should be called with the correct parameters
-    EXPECT_CALL(*mockState, handleArticle(testing::_, testing::Eq(article), testing::Eq(OperationType::Update)))
-        .Times(1) // handleArticle should be called exactly once
-        .WillOnce(testing::Return());
+    EXPECT_FALSE(articleRegularNonValid->isValid());
 
-    // Action
-    track.updateArticle(article);
-}
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegularNonValid, OperationType::Create);
 
-TEST_F(TrackTest, UpdateArticlePoster)
-{
-    // Setup
-    auto mockState = std::make_shared<ReceptionStateTrack>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
+    // Define the JSON to build the regular article
+    const auto& jsonArticlePoster = R"(
+    {
+            "articleType": "Poster",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "",
+            "additionalFileUrl": "https://bit.ly/example2",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
 
-    auto article = std::make_shared<ArticlePoster>(); // Assuming default constructor exists
-    track.addArticle(article);
+    // Create smartpointer to the poster article
+    auto articlePoster = std::make_shared<ArticlePoster>(jsonArticlePoster);
 
-    // Action
-    track.updateArticle(article);
+    // Handle the article
+    trackRegular->handleTrackArticle(articlePoster, OperationType::Create);
 
-    EXPECT_EQ(track.amountArticles(), 1);
-}
+    // Check amount of articles
+    EXPECT_EQ(trackRegular->amountArticles(), 1);
 
-TEST_F(TrackTest, UpdateArticleRegular)
-{
-    // Setup
-    auto mockState = std::make_shared<ReceptionStateTrack>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
-
-    auto article = std::make_shared<ArticleRegular>(); // Assuming default constructor exists
-    track.addArticle(article);
-
-    // Action
-    track.updateArticle(article);
-
-    EXPECT_EQ(track.amountArticles(), 1);
-}
-
-TEST_F(TrackTest, UpdateArticleNotFound)
-{
-    // ToDo Implement when Article class has been fully implemented
-}
-
-TEST_F(TrackTest, RemoveArticle)
-{
-    // Setup
-    auto mockState = std::make_shared<MockTrackState>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
-
-    auto article = std::make_shared<Article>(); // Assuming default constructor exists
-
-    // Expectation: handleArticle should be called with the correct parameters
-    EXPECT_CALL(*mockState, handleArticle(testing::_, testing::Eq(article), testing::Eq(OperationType::Delete)))
-        .Times(1) // handleArticle should be called exactly once
-        .WillOnce(testing::Return());
-
-    // Action
-    track.removeArticle(article);
-}
-
-TEST_F(TrackTest, ChangeStateTrack)
-{
-    auto state = std::make_shared<MockTrackState>();
-    auto newState = std::make_shared<MockTrackState>();
-    std::vector<std::shared_ptr<User>> users; // Assuming User class with mocks or real instances
-
-    const std::string expectedState{"Initial State"};
-    const std::string expectedNewState{"Final State"};
-
-    auto track = std::make_unique<Track>("AI Conference", state, users);
-
-    // Trigger behavior that uses the mock object's methods if not used in constructor
-    // Assuming `currentState()` method that uses `stateName()`
-    EXPECT_EQ(track->trackName(), "AI Conference");
+    // No bidding ni review allowed
     testing::internal::CaptureStdout();
-    // Setting expectations before the object that uses it is created
-    EXPECT_CALL(*state, stateName()).WillOnce(testing::ReturnRef(expectedState));
-    track->currentState();
-    auto outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Initial State' state\n");
-    outputCurrentState.clear();
-
-    track->establishState(newState);
-    testing::internal::CaptureStdout();
-    // Setting expectations before the object that uses it is created
-    EXPECT_CALL(*newState, stateName()).WillOnce(testing::ReturnRef(expectedNewState));
-    track->currentState();
+    trackRegular->handleTrackBidding(articleRegular, BiddingInterest::Interested, OperationType::Create);
     outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Final State' state\n");
-}
-
-TEST_F(TrackTest, ReceptionStateTest)
-{
-    // Setup
-    auto mockState = std::make_shared<ReceptionStateTrack>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
-
-    testing::internal::CaptureStdout();
-    track.currentState();
-    auto outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Reception' state\n");
-
-    auto article = std::make_shared<Article>(); // Assuming default constructor exists
-
-    // Action
-    track.addArticle(article);
-    EXPECT_EQ(track.amountArticles(), 1);
-
-    track.updateArticle(article);
-    EXPECT_EQ(track.amountArticles(), 1);
-
-    track.removeArticle(article);
-    EXPECT_EQ(track.amountArticles(), 0);
-}
-
-TEST_F(TrackTest, BiddingStateTest)
-{
-    // Setup
-    auto mockState = std::make_shared<ReceptionStateTrack>();
-    Track track;
-    track.establishState(mockState); // Assuming this method sets the current state
-
-    testing::internal::CaptureStdout();
-    track.currentState();
-    auto outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Reception' state\n");
-    outputCurrentState.clear();
-
-    auto article = std::make_shared<Article>(); // Assuming default constructor exists
-
-    // Action
-    track.addArticle(article);
-    EXPECT_EQ(track.amountArticles(), 1);
-
-    testing::internal::CaptureStderr();
-    track.addBid(article, BiddingInterest::NotInterested);
-
-    outputCurrentState = testing::internal::GetCapturedStderr();
-
     EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
 
-    testing::internal::CaptureStderr();
-    track.updateBid(article, BiddingInterest::Maybe);
-
-    outputCurrentState = testing::internal::GetCapturedStderr();
-
-    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
-
-    testing::internal::CaptureStderr();
-    track.removeBid(article);
-    outputCurrentState = testing::internal::GetCapturedStderr();
-
-    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
-
-    // Move to bidding
-    auto bidingMock = std::make_shared<BiddingStateTrack>();
-    track.establishState(bidingMock); // Assuming this method sets the current state
-
     testing::internal::CaptureStdout();
-    track.currentState();
+    trackRegular->handleTrackReview(articleRegular, "Great article", OperationType::Create);
     outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Track currently is in 'Bidding' state\n");
+    EXPECT_STREQ(outputCurrentState.c_str(), "Not implemented yet\n");
+}
 
-    testing::internal::CaptureStderr();
-    track.addArticle(article);
-    outputCurrentState = testing::internal::GetCapturedStderr();
+TEST_F(TrackTest, WorkshopTrack)
+{
+    // Crate the JSON input
+    const auto& jsonTrackWorkshop = R"(
+    {
+            "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
 
+    // Create the track
+    auto trackWorkshop = TrackFactory::createTrack(jsonTrackWorkshop, TrackType::Workshop);
+
+    // Validate topic name
+    EXPECT_STREQ(trackWorkshop->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackWorkshop->currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Workshop 'Track SW Engineering' currently is in 'Reception' state\n");
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    EXPECT_TRUE(articleRegular->isValid());
+
+    // Handle the article
+    trackWorkshop->handleTrackArticle(articleRegular, OperationType::Create);
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegular = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegularNonValid = std::make_shared<ArticleRegular>(jsonArticleRegular);
+
+    EXPECT_FALSE(articleRegularNonValid->isValid());
+
+    // Handle the article
+    trackWorkshop->handleTrackArticle(articleRegularNonValid, OperationType::Create);
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticlePosterValid = R"(
+    {
+            "articleType": "Poster",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "additionalFileUrl": "https://bit.ly/example2",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the poster article
+    auto articlePoster = std::make_shared<ArticlePoster>(jsonArticlePosterValid);
+
+    // Handle the article
+    trackWorkshop->handleTrackArticle(articlePoster, OperationType::Create);
+
+    // Check amount of articles
+    EXPECT_EQ(trackWorkshop->amountArticles(), 2);
+
+    // No bidding ni review allowed
+    testing::internal::CaptureStdout();
+    trackWorkshop->handleTrackBidding(articleRegular, BiddingInterest::Interested, OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
+
+    testing::internal::CaptureStdout();
+    trackWorkshop->handleTrackReview(articleRegular, "Great article", OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Not implemented yet\n");
+}
+
+TEST_F(TrackTest, PosterTrack)
+{
+    // Crate the JSON input
+    const auto& jsonTrackPoster = R"(
+    {
+            "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
+
+    // Create the track
+    auto trackPoster = TrackFactory::createTrack(jsonTrackPoster, TrackType::Poster);
+
+    // Validate topic name
+    EXPECT_STREQ(trackPoster->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackPoster->currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Poster 'Track SW Engineering' currently is in 'Reception' state\n");
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    EXPECT_TRUE(articleRegular->isValid());
+
+    // Handle the article
+    trackPoster->handleTrackArticle(articleRegular, OperationType::Create);
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegular = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegularNonValid = std::make_shared<ArticleRegular>(jsonArticleRegular);
+
+    EXPECT_FALSE(articleRegularNonValid->isValid());
+
+    // Handle the article
+    trackPoster->handleTrackArticle(articleRegularNonValid, OperationType::Create);
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticlePosterValid = R"(
+    {
+            "articleType": "Poster",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "additionalFileUrl": "https://bit.ly/example2",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the poster article
+    auto articlePoster = std::make_shared<ArticlePoster>(jsonArticlePosterValid);
+
+    // Handle the article
+    trackPoster->handleTrackArticle(articlePoster, OperationType::Create);
+
+    // Check amount of articles
+    EXPECT_EQ(trackPoster->amountArticles(), 1);
+
+    // No bidding ni review allowed
+    testing::internal::CaptureStdout();
+    trackPoster->handleTrackBidding(articleRegular, BiddingInterest::Interested, OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in reception state\n");
+
+    testing::internal::CaptureStdout();
+    trackPoster->handleTrackReview(articleRegular, "Great article", OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Not implemented yet\n");
+}
+
+TEST_F(TrackTest, TrackOperations)
+{
+    // Crate the JSON input
+    const auto& jsonTrackRegular = R"(
+    {
+            "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
+
+    // Create the track
+    auto trackRegular = TrackFactory::createTrack(jsonTrackRegular, TrackType::Regular);
+
+    // Validate topic name
+    EXPECT_STREQ(trackRegular->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Reception' state\n");
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    EXPECT_TRUE(articleRegular->isValid());
+
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+
+    // Define the JSON to build the regular article v2
+    const auto& jsonArticleRegularValidV2 = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Check amount of articles
+    EXPECT_EQ(trackRegular->amountArticles(), 1);
+
+    auto articleRegularV2 = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegularV2, OperationType::Update);
+
+    // Check amount of articles
+    EXPECT_EQ(trackRegular->amountArticles(), 1);
+
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegularV2, OperationType::Delete);
+
+    // Check amount of articles
+    EXPECT_EQ(trackRegular->amountArticles(), 0);
+}
+
+TEST_F(TrackTest, TrackBidding)
+{
+    // Crate the JSON input
+    const auto& jsonTrackRegular = R"(
+    {
+            "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
+
+    // Create the track
+    auto trackRegular = TrackFactory::createTrack(jsonTrackRegular, TrackType::Regular);
+
+    // Validate topic name
+    EXPECT_STREQ(trackRegular->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Reception' state\n");
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "Regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    EXPECT_TRUE(articleRegular->isValid());
+
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+
+    auto biddingState = std::make_shared<BiddingStateTrack>();
+
+    EXPECT_TRUE(biddingState != nullptr);
+
+    // Change state
+    trackRegular->establishState(biddingState);
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Bidding' state\n");
+
+    // No more handle articles
+    testing::internal::CaptureStdout();
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
     EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
 
-    testing::internal::CaptureStderr();
-    track.updateArticle(article);
-    outputCurrentState = testing::internal::GetCapturedStderr();
+    // Create a bidding
+    trackRegular->handleTrackBidding(articleRegular, BiddingInterest::Interested, OperationType::Create);
 
-    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
+    // Update the bidding
+    trackRegular->handleTrackBidding(articleRegular, BiddingInterest::NotInterested, OperationType::Update);
 
-    testing::internal::CaptureStderr();
-    track.removeArticle(article);
-    outputCurrentState = testing::internal::GetCapturedStderr();
-
-    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
-
-    track.addBid(article, BiddingInterest::NotInterested);
-    track.updateBid(article, BiddingInterest::Maybe);
-    track.removeBid(article);
+    // Delete the bidding
+    trackRegular->handleTrackBidding(articleRegular, BiddingInterest::NotInterested, OperationType::Delete);
 }

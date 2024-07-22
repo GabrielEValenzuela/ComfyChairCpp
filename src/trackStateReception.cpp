@@ -22,8 +22,6 @@ void ReceptionStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& a
     case OperationType::Delete:
         removeArticle(articles, article);
         break;
-    default:
-        break;
     }
 }
 

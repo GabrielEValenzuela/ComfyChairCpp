@@ -21,6 +21,17 @@ void ArticlePoster::updateFields(const std::shared_ptr<Article>& article)
 
 void ArticlePoster::display() const
 {
+    std::cout << "=== Poster ===" << std::endl;
     Article::display();
     std::cout << "Second Attachment: " << m_secondAttach << std::endl;
+}
+
+bool ArticlePoster::isValid() const
+{
+    return !m_secondAttach.empty() && !m_title.empty() && !m_attachedUrl.empty();
+}
+
+const std::string& ArticlePoster::articleName() const
+{
+    return m_title;
 }

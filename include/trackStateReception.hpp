@@ -46,7 +46,6 @@ class ReceptionStateTrack : public ITrackState
     const std::string& stateName() override;
 
   private:
-    std::shared_ptr<Track> m_track;       // The track that the state is managing.
     std::string m_stateName{"Reception"}; // The state's name.
 
     /**

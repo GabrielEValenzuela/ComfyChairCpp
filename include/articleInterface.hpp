@@ -57,12 +57,17 @@ class Article
      * @brief Get the article's title
      * @return The article's title.
      */
-    const std::string& articleName() const;
+    virtual const std::string& articleName() const = 0;
 
     /**
      * @brief Display the article's information.
      */
     virtual void display() const;
+
+    /**
+     * @brief Return if the article is valid.
+     */
+    virtual bool isValid() const = 0;
 
   protected:
     std::string m_title;                ///< The article's name.
