@@ -47,15 +47,6 @@ class Conference
     }
 
     /**
-     * @brief Add a track to the conference.
-     * @param track The track to add.
-     */
-    void addTrack(const std::shared_ptr<Track>& track)
-    {
-        m_tracks.push_back(track);
-    }
-
-    /**
      * @brief Get the createdAt time point.
      * @return The createdAt time point.
      */

@@ -62,15 +62,11 @@ class Bid
      * @brief Getter for the bid type.
      * @return The bid type.
      */
-    BiddingInterest getBidType() const
+    BiddingInterest getBidInterest() const
     {
         return m_bidType;
     }
 
-    /**
-     * @brief Setter for the bid type.
-     * @param bidType The new bid type.
-     */
     /**
      * @brief Setter for the bidding interest.
      * @param interest The new bidding interest.

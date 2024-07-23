@@ -66,12 +66,12 @@ TEST_F(ReviewerTest, ReviewerUpdateBid)
     auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
     reviewer->bid(bid, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getBids()[0]->getBidType(), BiddingInterest::Interested);
+    EXPECT_EQ(reviewer->getBids()[0]->getBidInterest(), BiddingInterest::Interested);
 
     bid->setBiddingInterest(BiddingInterest::NotInterested);
-    // reviewer->bid(bid, OperationType::Update);
+    reviewer->bid(bid, OperationType::Update);
 
-    EXPECT_EQ(reviewer->getBids()[0]->getBidType(), BiddingInterest::NotInterested);
+    EXPECT_EQ(reviewer->getBids()[0]->getBidInterest(), BiddingInterest::NotInterested);
 }
 
 TEST_F(ReviewerTest, ReviewerAddReview)

@@ -7,6 +7,7 @@
  */
 
 #include "conference.hpp"
+#include "trackFactory.hpp"
 
 #include <chrono>
 #include <ctime>
@@ -16,26 +17,27 @@
 
 Conference::Conference(const nlohmann::json& conferenceJson)
 {
-    /*
     if (conferenceJson.contains("chairs"))
     {
-        std::cout << conferenceJson["chairs"] << std::endl;
-        for (const auto& chairListJson : conferenceJson["chairs"])
+        for (const auto& chairJson : conferenceJson["chairs"])
         {
-            for (const auto& chairJson : chairListJson)
-            {
-                m_chairs.push_back(std::make_shared<User>(chairJson));
-            }
+            m_chairs.push_back(std::make_shared<User>(chairJson));
         }
     }
-
-    for (const auto& authorListJson : conferenceJson["authors"])
+    if (conferenceJson.contains("authors"))
     {
-        for (const auto& authorJson : authorListJson)
+        for (const auto& authorJson : conferenceJson["authors"])
         {
             m_authors.push_back(std::make_shared<User>(authorJson));
         }
-    }*/
+    }
+    if (conferenceJson.contains("tracks"))
+    {
+        for (const auto& trackJson : conferenceJson["tracks"])
+        {
+            m_tracks.push_back(TrackFactory::createTrack(trackJson, TrackType::Regular));
+        }
+    }
     m_createdAt = parseDate(conferenceJson.value("createdAt", ""));
 }
 

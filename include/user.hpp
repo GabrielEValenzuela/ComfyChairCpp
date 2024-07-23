@@ -14,7 +14,7 @@
 
 /**
  * @class User
- * @brief
+ * @brief Represents a user.
  */
 class User
 {
@@ -46,10 +46,10 @@ class User
     }
 
   protected:
-    std::string m_fullNames;
-    std::string m_affiliation;
-    std::string m_email;
-    std::string m_password;
+    std::string m_fullNames;   /**< The full name of the user. */
+    std::string m_affiliation; /**< The affiliation of the user. */
+    std::string m_email;       /**< The email of the user. */
+    std::string m_password;    /**< The password of the user. */
 };
 
 #endif // USER_HPP

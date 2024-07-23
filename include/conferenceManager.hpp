@@ -66,6 +66,16 @@ class ConferenceManager
      */
     void startSelection();
 
+    /**
+     * @brief Gets the shared pointer to the Conference object.
+     *
+     * @return A shared pointer to the Conference object.
+     */
+    std::shared_ptr<Conference> getConference() const
+    {
+        return m_conference;
+    }
+
   private:
     std::shared_ptr<Conference> m_conference;
 };
