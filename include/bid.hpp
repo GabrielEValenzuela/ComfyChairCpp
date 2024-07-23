@@ -77,7 +77,7 @@ class Bid
 
   private:
     std::string m_titleArticle; /**< The title of the article. */
-    BiddingInterest m_bidType; /**< The bid type. */
+    BiddingInterest m_bidType;  /**< The bid type. */
 };
 ;
 
