@@ -12,7 +12,6 @@
 #include <string>
 
 /**
- * @enum BidType
  * @brief Represents the type of bid.
  */
 enum class BiddingInterest
@@ -77,8 +76,8 @@ class Bid
     }
 
   private:
-    std::string m_titleArticle;
-    BiddingInterest m_bidType;
+    std::string m_titleArticle; /**< The title of the article. */
+    BiddingInterest m_bidType; /**< The bid type. */
 };
 ;
 
