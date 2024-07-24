@@ -56,7 +56,7 @@ TEST_F(ConferenceTest, ConferenceRevisionTime)
 {
     auto today = std::chrono::system_clock::now();
 
-    conference->revisionStart(std::chrono::system_clock::now());
+    conference->revisionStart(today);
 
     EXPECT_EQ(conference->revisionStart(), today);
 }
@@ -65,7 +65,7 @@ TEST_F(ConferenceTest, ConferenceSelectiiobTime)
 {
     auto today = std::chrono::system_clock::now();
 
-    conference->selectionStart(std::chrono::system_clock::now());
+    conference->selectionStart(today);
 
     EXPECT_EQ(conference->selectionStart(), today);
 }
