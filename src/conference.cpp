@@ -38,7 +38,14 @@ Conference::Conference(const nlohmann::json& conferenceJson)
             m_tracks.push_back(TrackFactory::createTrack(trackJson, TrackType::Regular));
         }
     }
-    m_createdAt = parseDate(conferenceJson.value("createdAt", ""));
+    if (conferenceJson.contains("createdAt"))
+    {
+        m_createdAt = parseDate(conferenceJson.value("createdAt", ""));
+    }
+    else
+    {
+        m_createdAt = std::chrono::system_clock::now();
+    }
 }
 
 std::chrono::system_clock::time_point Conference::parseDate(const std::string& dateStr)
@@ -52,4 +59,49 @@ std::chrono::system_clock::time_point Conference::parseDate(const std::string& d
     }
     std::time_t time = std::mktime(&tm);
     return std::chrono::system_clock::from_time_t(time);
+}
+
+std::chrono::system_clock::time_point Conference::biddingStart()
+{
+    return m_biddingStart;
+}
+
+void Conference::biddingStart(const std::chrono::system_clock::time_point& timePoint)
+{
+    m_biddingStart = timePoint;
+}
+
+std::chrono::system_clock::time_point Conference::revisionStart()
+{
+    return m_revisionStart;
+}
+
+void Conference::revisionStart(const std::chrono::system_clock::time_point& timePoint)
+{
+    m_revisionStart = timePoint;
+}
+
+std::chrono::system_clock::time_point Conference::selectionStart()
+{
+    return m_selectionStart;
+}
+
+void Conference::selectionStart(const std::chrono::system_clock::time_point& timePoint)
+{
+    m_selectionStart = timePoint;
+}
+
+std::vector<std::shared_ptr<User>> Conference::chairs()
+{
+    return m_chairs;
+}
+
+std::vector<std::shared_ptr<Track>> Conference::tracks()
+{
+    return m_tracks;
+}
+
+std::chrono::system_clock::time_point Conference::createdAt()
+{
+    return m_createdAt;
 }

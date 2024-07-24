@@ -41,82 +41,55 @@ class Conference
      * @brief Get the tracks.
      * @return A vector of shared pointers to Track objects representing the tracks.
      */
-    std::vector<std::shared_ptr<Track>> getTracks() const
-    {
-        return m_tracks;
-    }
+    std::vector<std::shared_ptr<Track>> tracks();
 
     /**
      * @brief Get the createdAt time point.
      * @return The createdAt time point.
      */
-    std::chrono::system_clock::time_point getCreatedAt() const
-    {
-        return m_createdAt;
-    }
+    std::chrono::system_clock::time_point createdAt();
 
     /**
      * @brief Get the biddingStart time point.
      * @return The biddingStart time point.
      */
-    std::chrono::system_clock::time_point getBiddingStart() const
-    {
-        return m_biddingStart;
-    }
+    std::chrono::system_clock::time_point biddingStart();
 
     /**
      * @brief Set the biddingStart time point.
      * @param timePoint The biddingStart time point to set.
      */
-    void setBiddingStart(const std::chrono::system_clock::time_point& timePoint)
-    {
-        m_biddingStart = timePoint;
-    }
+    void biddingStart(const std::chrono::system_clock::time_point& timePoint);
 
     /**
      * @brief Get the revisionStart time point.
      * @return The revisionStart time point.
      */
-    std::chrono::system_clock::time_point getRevisionStart() const
-    {
-        return m_revisionStart;
-    }
+    std::chrono::system_clock::time_point revisionStart();
 
     /**
      * @brief Set the revisionStart time point.
      * @param timePoint The revisionStart time point to set.
      */
-    void setRevisionStart(const std::chrono::system_clock::time_point& timePoint)
-    {
-        m_revisionStart = timePoint;
-    }
+    void revisionStart(const std::chrono::system_clock::time_point& timePoint);
 
     /**
      * @brief Get the selectionStart time point.
      * @return The selectionStart time point.
      */
-    std::chrono::system_clock::time_point getSelectionStart() const
-    {
-        return m_selectionStart;
-    }
+    std::chrono::system_clock::time_point selectionStart();
 
     /**
      * @brief Set the selectionStart time point.
      * @param timePoint The selectionStart time point to set.
      */
-    void setSelectionStart(const std::chrono::system_clock::time_point& timePoint)
-    {
-        m_selectionStart = timePoint;
-    }
+    void selectionStart(const std::chrono::system_clock::time_point& timePoint);
 
     /**
      * @brief Get the chairs.
      * @return A vector of shared pointers to User objects representing the chairs.
      */
-    std::vector<std::shared_ptr<User>> getChairs() const
-    {
-        return m_chairs;
-    }
+    std::vector<std::shared_ptr<User>> chairs();
 
   private:
     std::chrono::system_clock::time_point parseDate(const std::string& dateStr);

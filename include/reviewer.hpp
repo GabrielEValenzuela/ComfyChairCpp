@@ -44,19 +44,13 @@ class Reviewer : public User
      * @brief Getter for the bids vector.
      * @return A const reference to the bids vector.
      */
-    const std::vector<std::shared_ptr<Bid>>& getBids() const
-    {
-        return m_bids;
-    }
+    const std::vector<std::shared_ptr<Bid>>& bids();
 
     /**
      * @brief Getter for the reviews vector.
      * @return A const reference to the reviews vector.
      */
-    const std::vector<std::shared_ptr<Review>>& getReviews() const
-    {
-        return m_reviews;
-    }
+    const std::vector<std::shared_ptr<Review>>& reviews();
 
     /**
      * @brief Places a bid on an item.

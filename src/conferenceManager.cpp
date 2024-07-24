@@ -10,29 +10,34 @@
 #include "trackStateBidding.hpp"
 #include "trackStateReception.hpp"
 
-void ConferenceManager::startBidding()
+void ConferenceManager::startBidding(std::chrono::system_clock::time_point time)
 {
-    std::vector<std::shared_ptr<Track>> tracks = m_conference->getTracks();
-    for (auto& track : tracks)
+    for (auto& track : m_conference->tracks())
     {
         track->establishState(std::make_unique<BiddingStateTrack>());
+        m_conference->biddingStart(time);
     }
 }
 
-void ConferenceManager::startRevision()
+void ConferenceManager::startRevision(std::chrono::system_clock::time_point time)
 {
-    std::vector<std::shared_ptr<Track>> tracks = m_conference->getTracks();
-    for (auto& track : tracks)
+    for (auto& track : m_conference->tracks())
     {
         track->establishState(std::make_unique<ReceptionStateTrack>());
+        m_conference->revisionStart(time);
     }
 }
 
-void ConferenceManager::startSelection()
+void ConferenceManager::startSelection(std::chrono::system_clock::time_point time)
 {
-    std::vector<std::shared_ptr<Track>> tracks = m_conference->getTracks();
-    for (auto& track : tracks)
+    for (auto& track : m_conference->tracks())
     {
         // track->establishState(std::make_unique<BiddingStateTrack>());
+        m_conference->selectionStart(time);
     }
+}
+
+std::shared_ptr<Conference> ConferenceManager::conference()
+{
+    return m_conference;
 }

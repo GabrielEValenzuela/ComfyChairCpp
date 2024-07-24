@@ -15,3 +15,8 @@ User::User(const nlohmann::json& userJson)
     m_email = userJson.value("email", "");
     m_password = userJson.value("password", "");
 }
+
+std::string User::fullNames()
+{
+    return m_fullNames;
+}

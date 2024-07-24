@@ -31,7 +31,7 @@ void ReviewerTest::TearDown()
 TEST_F(ReviewerTest, ReviewerCreation)
 {
     EXPECT_TRUE(reviewer != nullptr);
-    EXPECT_EQ(reviewer->getFullNames(), "Martin Venturino");
+    EXPECT_EQ(reviewer->fullNames(), "Martin Venturino");
 }
 
 TEST_F(ReviewerTest, ReviewerAddBid)
@@ -40,8 +40,8 @@ TEST_F(ReviewerTest, ReviewerAddBid)
     auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
     reviewer->bid(bid, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getBids().size(), 1);
-    EXPECT_EQ(reviewer->getBids()[0]->getTitleArticle(), "Visualizing Big Data");
+    EXPECT_EQ(reviewer->bids().size(), 1);
+    EXPECT_EQ(reviewer->bids()[0]->titleArticle(), "Visualizing Big Data");
 }
 
 TEST_F(ReviewerTest, ReviewerRemoveBid)
@@ -53,11 +53,11 @@ TEST_F(ReviewerTest, ReviewerRemoveBid)
     auto bid2 = std::make_shared<Bid>("Bing Band", BiddingInterest::Maybe);
     reviewer->bid(bid2, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getBids().size(), 2);
+    EXPECT_EQ(reviewer->bids().size(), 2);
 
     reviewer->bid(bid, OperationType::Delete);
 
-    EXPECT_EQ(reviewer->getBids().size(), 1);
+    EXPECT_EQ(reviewer->bids().size(), 1);
 }
 
 TEST_F(ReviewerTest, ReviewerUpdateBid)
@@ -66,12 +66,12 @@ TEST_F(ReviewerTest, ReviewerUpdateBid)
     auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
     reviewer->bid(bid, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getBids()[0]->getBidInterest(), BiddingInterest::Interested);
+    EXPECT_EQ(reviewer->bids()[0]->bidInterest(), BiddingInterest::Interested);
 
-    bid->setBiddingInterest(BiddingInterest::NotInterested);
+    bid->biddingInterest(BiddingInterest::NotInterested);
     reviewer->bid(bid, OperationType::Update);
 
-    EXPECT_EQ(reviewer->getBids()[0]->getBidInterest(), BiddingInterest::NotInterested);
+    EXPECT_EQ(reviewer->bids()[0]->bidInterest(), BiddingInterest::NotInterested);
 }
 
 TEST_F(ReviewerTest, ReviewerAddReview)
@@ -87,8 +87,8 @@ TEST_F(ReviewerTest, ReviewerAddReview)
         Rating::Good);
     reviewer->review(review, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getReviews().size(), 1);
-    EXPECT_EQ(reviewer->getReviews()[0]->getRating(), Rating::Good);
+    EXPECT_EQ(reviewer->reviews().size(), 1);
+    EXPECT_EQ(reviewer->reviews()[0]->rating(), Rating::Good);
 }
 
 TEST_F(ReviewerTest, ReviewerDeleteReview)
@@ -104,11 +104,11 @@ TEST_F(ReviewerTest, ReviewerDeleteReview)
         Rating::Good);
     reviewer->review(review, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getReviews().size(), 1);
+    EXPECT_EQ(reviewer->reviews().size(), 1);
 
     reviewer->review(review, OperationType::Delete);
 
-    EXPECT_EQ(reviewer->getReviews().size(), 0);
+    EXPECT_EQ(reviewer->reviews().size(), 0);
 }
 
 TEST_F(ReviewerTest, ReviewerUpdateReview)
@@ -124,9 +124,32 @@ TEST_F(ReviewerTest, ReviewerUpdateReview)
         Rating::Good);
     reviewer->review(review, OperationType::Create);
 
-    EXPECT_EQ(reviewer->getReviews()[0]->getRating(), Rating::Good);
+    EXPECT_EQ(reviewer->reviews()[0]->rating(), Rating::Good);
 
-    review->setRating(Rating::Bad);
+    review->rating(Rating::Bad);
 
-    EXPECT_EQ(reviewer->getReviews()[0]->getRating(), Rating::Bad);
+    EXPECT_EQ(reviewer->reviews()[0]->rating(), Rating::Bad);
+}
+
+TEST_F(ReviewerTest, ReviewerTitleTextReview)
+{
+
+    auto review = std::make_shared<Review>(
+        "Visualizing Big Data",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore "
+        "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+        "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat "
+        "nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit "
+        "anim id est laborum.",
+        Rating::Good);
+    reviewer->review(review, OperationType::Create);
+
+    EXPECT_EQ(reviewer->reviews()[0]->titleArticle(), "Visualizing Big Data");
+    EXPECT_EQ(
+        reviewer->reviews()[0]->text(),
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore "
+        "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+        "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat "
+        "nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit "
+        "anim id est laborum.");
 }

@@ -54,14 +54,17 @@ TEST_F(ConferenceManagerTest, ConferenceManagerCreation)
 TEST_F(ConferenceManagerTest, ConferenceManagerTrackState)
 {
     testing::internal::CaptureStdout();
-    conferenceManager->getConference()->getTracks()[0]->currentState();
+    conferenceManager->conference()->tracks()[0]->currentState();
     auto outputCurrentState = testing::internal::GetCapturedStdout();
     EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Reception' state\n");
 
-    conferenceManager->startBidding();
+    auto today = std::chrono::system_clock::now();
+    conferenceManager->startBidding(today);
+
+    EXPECT_EQ(conferenceManager->conference()->biddingStart(), today);
 
     testing::internal::CaptureStdout();
-    conferenceManager->getConference()->getTracks()[0]->currentState();
+    conferenceManager->conference()->tracks()[0]->currentState();
     outputCurrentState = testing::internal::GetCapturedStdout();
     EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Bidding' state\n");
 }

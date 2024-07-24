@@ -12,14 +12,6 @@
 
 void ConferenceTest::SetUp()
 {
-}
-
-void ConferenceTest::TearDown()
-{
-}
-
-TEST_F(ConferenceTest, ConferenceCreation)
-{
     const auto& jsonConference = R"(
     {
         "chairs": [
@@ -46,9 +38,34 @@ TEST_F(ConferenceTest, ConferenceCreation)
     }
     )"_json;
 
-    auto conference = std::make_shared<Conference>(jsonConference);
+    conference = std::make_shared<Conference>(jsonConference);
+}
 
+void ConferenceTest::TearDown()
+{
+}
+
+TEST_F(ConferenceTest, ConferenceCreation)
+{
     EXPECT_TRUE(conference != nullptr);
-    EXPECT_EQ(conference->getChairs().size(), 1);
-    EXPECT_EQ(conference->getTracks().size(), 2);
+    EXPECT_EQ(conference->chairs().size(), 1);
+    EXPECT_EQ(conference->tracks().size(), 2);
+}
+
+TEST_F(ConferenceTest, ConferenceRevisionTime)
+{
+    auto today = std::chrono::system_clock::now();
+
+    conference->revisionStart(std::chrono::system_clock::now());
+
+    EXPECT_EQ(conference->revisionStart(), today);
+}
+
+TEST_F(ConferenceTest, ConferenceSelectiiobTime)
+{
+    auto today = std::chrono::system_clock::now();
+
+    conference->selectionStart(std::chrono::system_clock::now());
+
+    EXPECT_EQ(conference->selectionStart(), today);
 }

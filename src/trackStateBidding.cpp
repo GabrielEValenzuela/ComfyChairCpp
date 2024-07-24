@@ -1,5 +1,5 @@
 #include "trackStateBidding.hpp"
-#include <bid.hpp>
+#include "bid.hpp"
 
 void BiddingStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& articles,
                                       const std::shared_ptr<Article>& article, OperationType operation)

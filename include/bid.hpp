@@ -52,28 +52,19 @@ class Bid
      * @brief Getter for the title of the article.
      * @return The title of the article.
      */
-    std::string getTitleArticle() const
-    {
-        return m_titleArticle;
-    }
+    std::string titleArticle();
 
     /**
      * @brief Getter for the bid type.
      * @return The bid type.
      */
-    BiddingInterest getBidInterest() const
-    {
-        return m_bidType;
-    }
+    BiddingInterest bidInterest();
 
     /**
      * @brief Setter for the bidding interest.
      * @param interest The new bidding interest.
      */
-    void setBiddingInterest(BiddingInterest interest)
-    {
-        m_bidType = interest;
-    }
+    void biddingInterest(BiddingInterest interest);
 
   private:
     std::string m_titleArticle; /**< The title of the article. */

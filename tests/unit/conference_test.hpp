@@ -9,7 +9,9 @@
 #ifndef CONFERENCE_TEST_HPP
 #define CONFERENCE_TEST_HPP
 
+#include "conference.hpp"
 #include "gtest/gtest.h"
+#include <memory>
 
 /**
  * @brief Runs unit tests for Conference.
@@ -34,6 +36,8 @@ class ConferenceTest : public ::testing::Test
      */
     void TearDown() override;
     // LCOV_EXCL_STOP
+
+    std::shared_ptr<Conference> conference; /**< The conference. */
 };
 
 #endif // CONFERENCE_TEST_HPP

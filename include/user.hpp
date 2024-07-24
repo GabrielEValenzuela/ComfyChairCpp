@@ -40,10 +40,7 @@ class User
      * @brief Getter for the full name.
      * @return The full name of the user.
      */
-    std::string getFullNames() const
-    {
-        return m_fullNames;
-    }
+    std::string fullNames();
 
   protected:
     std::string m_fullNames;   /**< The full name of the user. */

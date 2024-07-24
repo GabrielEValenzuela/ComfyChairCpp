@@ -31,5 +31,5 @@ TEST_F(UserTest, UserCreation)
     auto user = std::make_shared<User>(jsonUser);
 
     EXPECT_TRUE(user != nullptr);
-    EXPECT_EQ(user->getFullNames(), "Martin Venturino");
+    EXPECT_EQ(user->fullNames(), "Martin Venturino");
 }

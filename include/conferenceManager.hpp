@@ -46,7 +46,7 @@ class ConferenceManager
      *
      * @note This method does not return any value.
      */
-    void startBidding();
+    void startBidding(std::chrono::system_clock::time_point time);
 
     /**
      * @brief Starts the assingment and revision process for all tracks in the conference.
@@ -55,7 +55,7 @@ class ConferenceManager
      *
      * @note This method does not return any value.
      */
-    void startRevision();
+    void startRevision(std::chrono::system_clock::time_point time);
 
     /**
      * @brief Starts the selection process for all tracks in the conference.
@@ -64,17 +64,14 @@ class ConferenceManager
      *
      * @note This method does not return any value.
      */
-    void startSelection();
+    void startSelection(std::chrono::system_clock::time_point time);
 
     /**
      * @brief Gets the shared pointer to the Conference object.
      *
      * @return A shared pointer to the Conference object.
      */
-    std::shared_ptr<Conference> getConference() const
-    {
-        return m_conference;
-    }
+    std::shared_ptr<Conference> conference();
 
   private:
     std::shared_ptr<Conference> m_conference;
