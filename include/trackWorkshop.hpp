@@ -9,7 +9,9 @@
 #ifndef TRACK_WORKSHOP_HPP
 #define TRACK_WORKSHOP_HPP
 
+#include "bid.hpp"
 #include "track.hpp"
+#include "user.hpp"
 
 /**
  * @brief Track class that represents a track in the conference.

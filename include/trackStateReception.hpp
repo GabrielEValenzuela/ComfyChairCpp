@@ -11,6 +11,7 @@
 
 #include "track.hpp"
 #include "trackStateInterface.hpp"
+#include <bid.hpp>
 
 /**
  * @brief ITrackState is an interface class that defines the methods that a track must implement.

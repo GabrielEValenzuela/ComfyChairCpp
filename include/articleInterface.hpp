@@ -16,15 +16,6 @@
 #include <vector>
 
 /**
- * @brief Dummy struct for User
- * TodO Remove once User class is implemented
- */
-struct User
-{
-    int id; ///< User's id
-};
-
-/**
  * @class Article
  * @brief Represents an article in a conference or publication system.
  *

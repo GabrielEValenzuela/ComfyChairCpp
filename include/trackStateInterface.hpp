@@ -11,6 +11,7 @@
 
 #include "articleInterface.hpp"
 #include "trackStateException.hpp"
+#include <bid.hpp>
 #include <memory>
 #include <string>
 
@@ -19,13 +20,6 @@ enum class OperationType
     Create,
     Update,
     Delete
-};
-
-enum class BiddingInterest
-{
-    NotInterested,
-    Maybe,
-    Interested
 };
 
 /**

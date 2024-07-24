@@ -12,6 +12,7 @@
 #include "gtest/gtest.h"
 
 #include "articleInterface.hpp"
+#include "bid.hpp"
 #include "nlohmann/json.hpp"
 #include "trackStateInterface.hpp"
 #include <memory>

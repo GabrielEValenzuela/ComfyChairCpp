@@ -11,6 +11,7 @@
 #include "MockTrackState.hpp"
 #include "articlePoster.hpp"
 #include "articleRegular.hpp"
+#include "bid.hpp"
 #include "track.hpp"
 #include "trackFactory.hpp"
 #include "trackStateBidding.hpp"

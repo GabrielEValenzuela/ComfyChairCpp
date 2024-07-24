@@ -7,6 +7,7 @@
  */
 
 #include "trackWorkshop.hpp"
+#include "bid.hpp"
 #include "trackStateReception.hpp"
 
 TrackWorkshop::TrackWorkshop(const nlohmann::json& trackData)
