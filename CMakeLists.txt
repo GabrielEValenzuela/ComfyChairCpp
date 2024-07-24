@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 project(
-  "ComfyChairC++"
+  "ComfyChairCpp"
   VERSION 1.0.0
   DESCRIPTION "A comprehensive system designed to streamline the management of scientific conferences"
   LANGUAGES CXX
