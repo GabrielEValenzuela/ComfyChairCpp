@@ -10,6 +10,7 @@
 #define TRACK_HPP
 
 #include "articleInterface.hpp"
+#include "selectionStrategy.hpp"
 #include "trackStateInterface.hpp"
 #include <memory>
 #include <string>
@@ -59,6 +60,14 @@ class Track
                                    OperationType operation) = 0;
 
     /**
+     * @brief Handles the selection of a track.
+     * @param articleRatingMap The unordered map of articles and their ratings.
+     * @param number The track number to be selected.
+     */
+    virtual void handleTrackSelection(
+        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articleRatingMap, int number) = 0;
+
+    /**
      * @brief Get the track's name.
      * @return The track's name.
      */
@@ -80,6 +89,18 @@ class Track
      * @return Number of articles
      */
     virtual int amountArticles() const = 0;
+
+    /**
+     * @brief Sets the selection strategy for the track.
+     * @param strategy A shared pointer to the selection strategy to be set.
+     */
+    virtual void selectionStrategy(const std::shared_ptr<SelectionStrategy>& strategy) = 0;
+
+    /**
+     * @brief Get the selected articles in the track.
+     * @return A vector of shared pointers to the selected articles.
+     */
+    virtual std::vector<std::shared_ptr<Article>> selectedArticles() = 0;
 };
 
 #endif // TRACK_HPP

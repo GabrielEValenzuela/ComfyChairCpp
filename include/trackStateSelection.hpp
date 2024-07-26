@@ -6,50 +6,28 @@
  * MIT License
  */
 
-#ifndef TRACK_STATE_INTERFACE_HPP
-#define TRACK_STATE_INTERFACE_HPP
+#ifndef TRACK_STATE_SELECTION_HPP
+#define TRACK_STATE_SELECTION_HPP
 
-#include "articleInterface.hpp"
-#include "bid.hpp"
+#include "review.hpp"
 #include "selectionStrategy.hpp"
-#include "trackStateException.hpp"
-#include <memory>
-#include <string>
-
-enum class OperationType
-{
-    Create,
-    Update,
-    Delete
-};
+#include "trackStateInterface.hpp"
 
 /**
  * @brief ITrackState is an interface class that defines the methods that a track must implement.
  */
-class ITrackState
+class TrackStateSelection : public ITrackState
 {
   public:
     /**
-     * @brief Destructor.
-     */
-    virtual ~ITrackState(){};
-
-    /**
-     * @brief Constructor
-     */
-    ITrackState(){};
-
-    /**
-     * @brief Operate in a CUD way to handle an article.
-     * @param articles The list of articles modify.
+     * @brief Adds an article to the track.
+     * @param articles The list of articles to modify.
      * @param article The article to add.
      * @param operation The operation to perform.
      *
-     * @note This method is pure virtual because and only the
-     * reception state implements it.
      */
-    virtual void handleArticle(std::vector<std::shared_ptr<Article>>& articles, const std::shared_ptr<Article>& article,
-                               OperationType operation) = 0;
+    void handleArticle(std::vector<std::shared_ptr<Article>>& articles, const std::shared_ptr<Article>& article,
+                       OperationType operation) override;
 
     /**
      * @brief Operate in a CUD way to bidding an article.
@@ -58,9 +36,9 @@ class ITrackState
      * @param interest The interest to set.
      * @param operation The operation to perform.
      */
-    virtual void handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                               const std::shared_ptr<Article>& article, BiddingInterest interest,
-                               OperationType operation) = 0;
+    void handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
+                       const std::shared_ptr<Article>& article, BiddingInterest interest,
+                       OperationType operation) override;
 
     /**
      * @brief Handles the selection of articles based on the provided parameters.
@@ -71,13 +49,16 @@ class ITrackState
      */
     virtual void handleSelection(
         std::vector<std::shared_ptr<Article>> selectedArticles, std::shared_ptr<SelectionStrategy> selectionStrategy,
-        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number) = 0;
+        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number) override;
 
     /**
      * @brief Get the state's name.
      * @return The state's name.
      */
-    virtual const std::string& stateName() = 0;
+    const std::string& stateName() override;
+
+  private:
+    std::string m_stateName{"Selection"}; // The state's name.
 };
 
-#endif // TRACK_STATE_INTERFACE_HPP
+#endif // TRACK_STATE_SELECTION_HPP

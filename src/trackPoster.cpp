@@ -53,6 +53,17 @@ void TrackPoster::handleTrackReview(const std::shared_ptr<Article>& article, con
     std::cout << "Not implemented yet" << std::endl; // ToDo Implement this method
 }
 
+void TrackPoster::handleTrackSelection(
+    std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articleRatingMap, int number)
+{
+    if (m_selectionStrategy == nullptr)
+    {
+        throw std::runtime_error("Selection strategy is null");
+    }
+
+    // m_currentState->handleSelection(m_selectedArticles, m_selectionStrategy, articleRatingMap, number);
+}
+
 const std::string& TrackPoster::trackName() const
 {
     return m_trackName;
@@ -72,4 +83,14 @@ void TrackPoster::currentState() const
 int TrackPoster::amountArticles() const
 {
     return m_articles.size();
+}
+
+void TrackPoster::selectionStrategy(const std::shared_ptr<SelectionStrategy>& strategy)
+{
+    m_selectionStrategy = strategy;
+}
+
+std::vector<std::shared_ptr<Article>> TrackPoster::selectedArticles()
+{
+    return m_selectedArticles;
 }

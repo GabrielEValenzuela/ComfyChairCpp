@@ -60,6 +60,14 @@ class TrackRegular : public Track
                            OperationType operation) override;
 
     /**
+     * @brief Handles the selection of a track.
+     * @param articleRatingMap The unordered map of articles and their ratings.
+     * @param number The track number to be selected.
+     */
+    virtual void handleTrackSelection(
+        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articleRatingMap, int number) override;
+
+    /**
      * @brief Get the track's name.
      * @return The track's name.
      */
@@ -82,6 +90,18 @@ class TrackRegular : public Track
      */
     int amountArticles() const override;
 
+    /**
+     * @brief Sets the selection strategy for the track poster.
+     * @param strategy A shared pointer to the selection strategy to be set.
+     */
+    void selectionStrategy(const std::shared_ptr<SelectionStrategy>& strategy) override;
+
+    /**
+     * @brief Get the selected articles in the track.
+     * @return A vector of shared pointers to the selected articles.
+     */
+    std::vector<std::shared_ptr<Article>> selectedArticles() override;
+
   private:
     std::string m_trackName;                                  ///< The track's name.
     std::vector<std::shared_ptr<Article>> m_articles;         ///< The articles in the track.
@@ -89,7 +109,8 @@ class TrackRegular : public Track
     std::vector<std::shared_ptr<Article>> m_selectedArticles; ///< The selected articles in the track.
     std::shared_ptr<ITrackState> m_currentState;              ///< The track's state.
     std::unordered_map<std::shared_ptr<Article>, BiddingInterest>
-        m_articleBidding; ///< Relation between article and bidding interest.
+        m_articleBidding;                                   ///< Relation between article and bidding interest.
+    std::shared_ptr<SelectionStrategy> m_selectionStrategy; ///< The selection strategy.
 };
 
 #endif // TRACK_HPP
