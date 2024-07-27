@@ -16,6 +16,7 @@
  */
 enum class BiddingInterest
 {
+    None,
     NotInterested,
     Maybe,
     Interested
@@ -39,20 +40,18 @@ class Bid
      * @param title The title of the article.
      * @param bidType The bid type.
      */
-    Bid(const std::string& title, BiddingInterest bidType) : m_titleArticle(title), m_bidType(bidType)
-    {
-    }
+    Bid(const std::string& title, std::string& reviewerName, BiddingInterest bidType);
 
     /**
      * @brief Destructor.
      */
-    virtual ~Bid() = default;
+    ~Bid() = default;
 
     /**
      * @brief Getter for the title of the article.
      * @return The title of the article.
      */
-    std::string titleArticle();
+    std::string titleArticle() const;
 
     /**
      * @brief Getter for the bid type.
@@ -66,8 +65,14 @@ class Bid
      */
     void biddingInterest(BiddingInterest interest);
 
+    /**
+     * @brief Display the bid summary.
+     */
+    void bidSummary() const;
+
   private:
     std::string m_titleArticle; /**< The title of the article. */
+    std::string m_reviewerName; /**< The name of the reviewer. */
     BiddingInterest m_bidType;  /**< The bid type. */
 };
 ;

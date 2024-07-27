@@ -8,7 +8,7 @@
 
 #include "review.hpp"
 
-std::string Review::titleArticle()
+std::string Review::titleArticle() const
 {
     return m_titleArticle;
 }

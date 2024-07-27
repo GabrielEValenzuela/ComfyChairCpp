@@ -10,10 +10,11 @@
 #define USER_REVIEWER_HPP
 
 #include "bid.hpp"
+#include "itrackState.hpp"
 #include "review.hpp"
-#include "trackStateInterface.hpp"
 #include "user.hpp"
 #include <memory>
+#include <random>
 #include <vector>
 
 /**
@@ -44,7 +45,7 @@ class Reviewer : public User
      * @brief Getter for the bids vector.
      * @return A const reference to the bids vector.
      */
-    const std::vector<std::shared_ptr<Bid>>& bids();
+    const std::vector<Bid>& bids();
 
     /**
      * @brief Getter for the reviews vector.
@@ -53,15 +54,9 @@ class Reviewer : public User
     const std::vector<std::shared_ptr<Review>>& reviews();
 
     /**
-     * @brief Places a bid on an item.
-     *
-     * This method is used to place a bid on an item. The bid is represented by a shared pointer to a `Bid` object.
-     * The `operation` parameter specifies the type of operation to be performed on the bid.
-     *
-     * @param bid A shared pointer to a `Bid` object representing the bid to be placed.
-     * @param operation The type of operation to be performed on the bid.
+     * @brief Places a bid
      */
-    void bid(const std::shared_ptr<Bid>& bid, OperationType operation);
+    Bid determineInterest(const std::string& title) override;
 
     /**
      * @brief Performs a review operation on the given review.
@@ -74,8 +69,17 @@ class Reviewer : public User
      */
     void review(const std::shared_ptr<Review>& review, OperationType operation);
 
+    /**
+     * @brief Bool is reviewer
+     * @return True if the user is a reviewer.
+     */
+    bool isReviewer()
+    {
+        return true;
+    }
+
   private:
-    std::vector<std::shared_ptr<Bid>> m_bids;
+    std::vector<Bid> m_bids;
     std::vector<std::shared_ptr<Review>> m_reviews;
 };
 

@@ -59,7 +59,7 @@ class Review
      * @brief Getter for the title of the article.
      * @return The title of the article.
      */
-    std::string titleArticle();
+    std::string titleArticle() const;
 
     /**
      * @brief Getter for the text of the review.

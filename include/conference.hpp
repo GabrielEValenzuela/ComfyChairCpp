@@ -86,20 +86,31 @@ class Conference
     void selectionStart(const std::chrono::system_clock::time_point& timePoint);
 
     /**
-     * @brief Get the chairs.
-     * @return A vector of shared pointers to User objects representing the chairs.
+     * @brief Get the amount of particpants including reviewers,charis and authors.
+     * @return The amount of participants.
      */
-    std::vector<std::shared_ptr<User>> chairs();
+    size_t sizeParticipants();
+
+    /**
+     * @brief Print the bidding summary.
+     */
+    void printBiddingSummary();
 
   private:
     std::chrono::system_clock::time_point parseDate(const std::string& dateStr);
-    std::vector<std::shared_ptr<User>> m_chairs;
-    std::vector<std::shared_ptr<User>> m_authors;
+    std::vector<std::shared_ptr<User>> m_users;
+    std::unordered_map<std::string, std::shared_ptr<User>> m_reviewers;
     std::vector<std::shared_ptr<Track>> m_tracks;
     std::chrono::system_clock::time_point m_createdAt;
     std::chrono::system_clock::time_point m_biddingStart;
     std::chrono::system_clock::time_point m_revisionStart;
     std::chrono::system_clock::time_point m_selectionStart;
+
+    /**
+     * @brief Validate the reviewers for a track, if the name is not in the users list, it will throw an exception.
+     *
+     */
+    void validateAndAddReviewers(std::shared_ptr<Track> track, const nlohmann::json& ConferenceJson);
 };
 
 #endif // CONFERENCE_HPP

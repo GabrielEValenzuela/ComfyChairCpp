@@ -8,17 +8,23 @@
 
 #include "reviewer.hpp"
 
-void Reviewer::bid(const std::shared_ptr<Bid>& bid, OperationType operation)
+Bid Reviewer::determineInterest(const std::string& title)
 {
-    if (operation == OperationType::Create)
+    static std::mt19937 gen(time(nullptr));           // Random number generator
+    static std::uniform_int_distribution<> dis(0, 3); // Distribution
+
+    int decision = dis(gen);
+    Bid bid;
+    if (decision == 0)
     {
-        m_bids.push_back(bid);
+        bid = Bid(title, m_fullNames, BiddingInterest::None); // No bid
     }
-    else if (operation == OperationType::Delete)
+    else
     {
-        // Remove the bid from the list
-        m_bids.erase(std::remove(m_bids.begin(), m_bids.end(), bid), m_bids.end());
+        bid = Bid(title, m_fullNames, static_cast<BiddingInterest>(decision - 1)); // Adjusted for enum indexing
     }
+    m_bids.push_back(bid);
+    return bid;
 }
 
 void Reviewer::review(const std::shared_ptr<Review>& review, OperationType operation)
@@ -34,7 +40,7 @@ void Reviewer::review(const std::shared_ptr<Review>& review, OperationType opera
     }
 }
 
-const std::vector<std::shared_ptr<Bid>>& Reviewer::bids()
+const std::vector<Bid>& Reviewer::bids()
 {
     return m_bids;
 }

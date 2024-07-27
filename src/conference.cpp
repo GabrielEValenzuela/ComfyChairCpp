@@ -7,6 +7,7 @@
  */
 
 #include "conference.hpp"
+#include "reviewer.hpp"
 #include "trackFactory.hpp"
 
 #include <chrono>
@@ -17,25 +18,43 @@
 
 Conference::Conference(const nlohmann::json& conferenceJson)
 {
-    if (conferenceJson.contains("chairs"))
+    // Parse the conference's information
+
+    // Start with the users, as they are needed for the reviewers we map
+    // by full name
+    if (conferenceJson.contains("users"))
     {
-        for (const auto& chairJson : conferenceJson["chairs"])
+        for (const auto& userJson : conferenceJson["users"])
         {
-            m_chairs.push_back(std::make_shared<User>(chairJson));
+            if (!userJson.at("isReviewer").get<bool>())
+            {
+                m_users.emplace_back(std::make_shared<User>(userJson));
+            }
+            else
+            {
+                auto reviewer = std::make_shared<Reviewer>(userJson);
+                m_reviewers.insert({reviewer->fullNames(), reviewer});
+                m_users.push_back(reviewer);
+            }
         }
     }
-    if (conferenceJson.contains("authors"))
-    {
-        for (const auto& authorJson : conferenceJson["authors"])
-        {
-            m_authors.push_back(std::make_shared<User>(authorJson));
-        }
-    }
+
+    // Parse the conference's tracks
+    // And add the reviewers to the tracks
     if (conferenceJson.contains("tracks"))
     {
-        for (const auto& trackJson : conferenceJson["tracks"])
+        for (const auto& trackJson : conferenceJson.at("tracks"))
         {
-            m_tracks.push_back(TrackFactory::createTrack(trackJson, TrackType::Regular));
+            try
+            {
+                auto track = TrackFactory::createTrack(trackJson);
+                validateAndAddReviewers(track, trackJson);
+                m_tracks.push_back(track);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Error creating track: " << e.what() << std::endl;
+            }
         }
     }
     if (conferenceJson.contains("createdAt"))
@@ -78,6 +97,7 @@ std::chrono::system_clock::time_point Conference::revisionStart()
 
 void Conference::revisionStart(const std::chrono::system_clock::time_point& timePoint)
 {
+    printBiddingSummary();
     m_revisionStart = timePoint;
 }
 
@@ -91,11 +111,6 @@ void Conference::selectionStart(const std::chrono::system_clock::time_point& tim
     m_selectionStart = timePoint;
 }
 
-std::vector<std::shared_ptr<User>> Conference::chairs()
-{
-    return m_chairs;
-}
-
 std::vector<std::shared_ptr<Track>> Conference::tracks()
 {
     return m_tracks;
@@ -104,4 +119,38 @@ std::vector<std::shared_ptr<Track>> Conference::tracks()
 std::chrono::system_clock::time_point Conference::createdAt()
 {
     return m_createdAt;
+}
+
+void Conference::validateAndAddReviewers(std::shared_ptr<Track> track, const nlohmann::json& trackJson)
+{
+    if (trackJson.contains("reviewers"))
+    {
+        for (const auto& reviewerName : trackJson["reviewers"])
+        {
+
+            for (const auto& user : m_reviewers)
+            {
+            }
+            if (m_reviewers.find(reviewerName) == m_reviewers.end())
+            {
+                throw std::invalid_argument("Reviewer not found: " + reviewerName.get<std::string>());
+            }
+            track->addReviewer(m_reviewers[reviewerName]);
+        }
+    }
+}
+
+size_t Conference::sizeParticipants()
+{
+    return m_users.size();
+}
+
+void Conference::printBiddingSummary()
+{
+    std::cout << "Bidding Summary" << std::endl;
+    std::cout << "================" << std::endl;
+    for (const auto& track : m_tracks)
+    {
+        track->currentBids();
+    }
 }

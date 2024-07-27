@@ -11,6 +11,7 @@
 
 #include "articleInterface.hpp"
 #include "trackStateException.hpp"
+#include "user.hpp"
 #include <bid.hpp>
 #include <memory>
 #include <string>
@@ -52,14 +53,13 @@ class ITrackState
 
     /**
      * @brief Operate in a CUD way to bidding an article.
-     * @param interestMap The map of articles and their bidding interests.
-     * @param article The article.
-     * @param interest The interest to set.
-     * @param operation The operation to perform.
+     * @param articles The articles to bid.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param reviewers The reviewers that are bidding.
      */
-    virtual void handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                               const std::shared_ptr<Article>& article, BiddingInterest interest,
-                               OperationType operation) = 0;
+    virtual void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
+                               std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                               const std::vector<std::shared_ptr<User>> reviewers) = 0;
 
     /**
      * @brief Get the state's name.

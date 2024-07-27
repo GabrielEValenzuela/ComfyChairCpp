@@ -14,7 +14,7 @@ void ReviewerTest::SetUp()
 {
     const auto& jsonUser = R"(
     {
-            "fullNames": "Martin Venturino",
+            "name": "Martin Venturino",
             "affiliation": "Tecnicas y herramientas",
             "email": "marven@tyh.com",
             "password": "https://bit.ly/example2"
@@ -37,41 +37,10 @@ TEST_F(ReviewerTest, ReviewerCreation)
 TEST_F(ReviewerTest, ReviewerAddBid)
 {
 
-    auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
-    reviewer->bid(bid, OperationType::Create);
+    auto bid = reviewer->determineInterest("Test");
 
     EXPECT_EQ(reviewer->bids().size(), 1);
-    EXPECT_EQ(reviewer->bids()[0]->titleArticle(), "Visualizing Big Data");
-}
-
-TEST_F(ReviewerTest, ReviewerRemoveBid)
-{
-
-    auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
-    reviewer->bid(bid, OperationType::Create);
-
-    auto bid2 = std::make_shared<Bid>("Bing Band", BiddingInterest::Maybe);
-    reviewer->bid(bid2, OperationType::Create);
-
-    EXPECT_EQ(reviewer->bids().size(), 2);
-
-    reviewer->bid(bid, OperationType::Delete);
-
-    EXPECT_EQ(reviewer->bids().size(), 1);
-}
-
-TEST_F(ReviewerTest, ReviewerUpdateBid)
-{
-
-    auto bid = std::make_shared<Bid>("Visualizing Big Data", BiddingInterest::Interested);
-    reviewer->bid(bid, OperationType::Create);
-
-    EXPECT_EQ(reviewer->bids()[0]->bidInterest(), BiddingInterest::Interested);
-
-    bid->biddingInterest(BiddingInterest::NotInterested);
-    reviewer->bid(bid, OperationType::Update);
-
-    EXPECT_EQ(reviewer->bids()[0]->bidInterest(), BiddingInterest::NotInterested);
+    EXPECT_STREQ(reviewer->bids().front().titleArticle().c_str(), "Test");
 }
 
 TEST_F(ReviewerTest, ReviewerAddReview)

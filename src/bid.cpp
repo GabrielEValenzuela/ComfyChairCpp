@@ -7,26 +7,34 @@
  */
 
 #include "bid.hpp"
+#include <iostream>
 
-std::string Bid::titleArticle()
+Bid::Bid(const std::string& title, std::string& reviewerName, BiddingInterest bidType)
+    : m_titleArticle(title), m_bidType(bidType), m_reviewerName(reviewerName)
+{
+}
+
+std::string Bid::titleArticle() const
 {
     return m_titleArticle;
 }
 
-/**
- * @brief Getter for the bid type.
- * @return The bid type.
- */
+// LCOV_EXCL_START
 BiddingInterest Bid::bidInterest()
 {
     return m_bidType;
 }
+// LCOV_EXCL_STOP
 
-/**
- * @brief Setter for the bidding interest.
- * @param interest The new bidding interest.
- */
+// LCOV_EXCL_START
 void Bid::biddingInterest(BiddingInterest interest)
 {
     m_bidType = interest;
+}
+// LCOV_EXCL_STOP
+
+void Bid::bidSummary() const
+{
+    std::cout << "Reviewer: " << m_reviewerName << std::endl;
+    std::cout << "Interest: " << static_cast<int>(m_bidType) << std::endl;
 }

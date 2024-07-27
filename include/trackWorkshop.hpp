@@ -53,21 +53,13 @@ class TrackWorkshop : public Track
 
     /**
      * @brief Adds a bid to an article.
-     * @param article The article to bid.
-     * @param interest The interest to set.
-     * @param operation Operation to perform.
      */
-    void handleTrackBidding(const std::shared_ptr<Article>& article, BiddingInterest interest,
-                            OperationType operation) override;
+    void handleTrackBidding() override;
 
     /**
      * @brief Adds a review to an article.
-     * @param article The article to review.
-     * @param review The review to set. //Todo Define the parameter once review class is implemented.
-     * @param operation Operation to perform.
      */
-    void handleTrackReview(const std::shared_ptr<Article>& article, const std::string& review,
-                           OperationType operation) override;
+    void handleTrackReview() override;
 
     /**
      * @brief Get the track's name.
@@ -92,13 +84,29 @@ class TrackWorkshop : public Track
      */
     int amountArticles() const override;
 
+    /**
+     * @brief Get the amount of bids on the track
+     * @return Number of bids
+     */
+    size_t amountBids() const override;
+
+    /**
+     * @brief Prints the current bids of the track.
+     */
+    void currentBids() const override;
+
+    /**
+     * @brief Add a reviewer to the track.
+     */
+    void addReviewer(const std::shared_ptr<User> reviewer) override;
+
   private:
     std::string m_trackName;                                  ///< The track's name.
     std::vector<std::shared_ptr<Article>> m_articles;         ///< The articles in the track.
-    std::vector<std::shared_ptr<User>> m_users;               ///< The users in the track.
+    std::vector<std::shared_ptr<User>> m_reviewers;           ///< The users in the track.
     std::vector<std::shared_ptr<Article>> m_selectedArticles; ///< The selected articles in the track.
     std::shared_ptr<ITrackState> m_currentState;              ///< The track's state.
-    std::unordered_map<std::shared_ptr<Article>, BiddingInterest>
+    std::unordered_map<std::shared_ptr<Article>, Bid>
         m_articleBidding; ///< Relation between article and bidding interest.
 };
 

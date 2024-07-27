@@ -15,13 +15,6 @@
 #include "trackWorkshop.hpp"
 #include <memory>
 
-enum class TrackType
-{
-    Regular,
-    Workshop,
-    Poster
-};
-
 /**
  * @brief TrackFactory class that creates tracks.
  */
@@ -31,21 +24,32 @@ class TrackFactory
     /**
      * @brief Creates a track.
      * @param trackData The track data.
-     * @param type The track type.
      * @return The track.
      */
-    static std::shared_ptr<Track> createTrack(const nlohmann::json& trackData, TrackType type)
+    static std::shared_ptr<Track> createTrack(const nlohmann::json& trackData)
     {
-        switch (type)
+        try
         {
-        case TrackType::Regular:
-            return std::make_shared<TrackRegular>(trackData);
-        case TrackType::Workshop:
-            return std::make_shared<TrackWorkshop>(trackData);
-        case TrackType::Poster:
-            return std::make_shared<TrackPoster>(trackData);
-        default:
-            throw std::invalid_argument("Unknown track type.");
+            if (trackData.at("trackType") == "regular")
+            {
+                return std::make_shared<TrackRegular>(trackData);
+            }
+            else if (trackData.at("trackType") == "workshop")
+            {
+                return std::make_shared<TrackWorkshop>(trackData);
+            }
+            else if (trackData.at("trackType") == "poster")
+            {
+                return std::make_shared<TrackPoster>(trackData);
+            }
+            else
+            {
+                throw std::invalid_argument("Unknown track type. Did you check if the key 'trackType' is present?.");
+            }
+        }
+        catch (const std::exception& e)
+        {
+            throw std::invalid_argument("Unknown track type. Did you check if the key 'trackType' is present?.");
         }
     }
 };

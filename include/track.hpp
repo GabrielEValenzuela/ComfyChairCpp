@@ -10,7 +10,8 @@
 #define TRACK_HPP
 
 #include "articleInterface.hpp"
-#include "trackStateInterface.hpp"
+#include "itrackState.hpp"
+#include "user.hpp"
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -41,22 +42,14 @@ class Track
     virtual void handleTrackArticle(const std::shared_ptr<Article>& article, OperationType operation) = 0;
 
     /**
-     * @brief Adds a bid to an article.
-     * @param article The article to bid.
-     * @param interest The interest to set.
-     * @param operation Operation to perform.
+     * @brief Adds a bid to each article in the track.
      */
-    virtual void handleTrackBidding(const std::shared_ptr<Article>& article, BiddingInterest interest,
-                                    OperationType operation) = 0;
+    virtual void handleTrackBidding() = 0;
 
     /**
      * @brief Adds a review to an article.
-     * @param article The article to review.
-     * @param review The review to set. //Todo Define the parameter once review class is implemented.
-     * @param operation Operation to perform.
      */
-    virtual void handleTrackReview(const std::shared_ptr<Article>& article, const std::string& review,
-                                   OperationType operation) = 0;
+    virtual void handleTrackReview() = 0;
 
     /**
      * @brief Get the track's name.
@@ -80,6 +73,22 @@ class Track
      * @return Number of articles
      */
     virtual int amountArticles() const = 0;
+
+    /**
+     * @brief Get the amount of bids on the track
+     * @return Number of bids
+     */
+    virtual size_t amountBids() const = 0;
+
+    /**
+     * @brief Prints the current bids of the track.
+     */
+    virtual void currentBids() const = 0;
+
+    /**
+     * @brief Add a reviewer to the track.
+     */
+    virtual void addReviewer(const std::shared_ptr<User> reviewer) = 0;
 };
 
 #endif // TRACK_HPP

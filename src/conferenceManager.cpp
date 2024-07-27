@@ -21,6 +21,7 @@ void ConferenceManager::startBidding(std::chrono::system_clock::time_point time)
 
 void ConferenceManager::startRevision(std::chrono::system_clock::time_point time)
 {
+
     for (auto& track : m_conference->tracks())
     {
         track->establishState(std::make_unique<ReceptionStateTrack>());
