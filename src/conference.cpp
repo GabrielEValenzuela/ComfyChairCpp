@@ -108,6 +108,7 @@ std::chrono::system_clock::time_point Conference::selectionStart()
 
 void Conference::selectionStart(const std::chrono::system_clock::time_point& timePoint)
 {
+    printReviewSummary();
     m_selectionStart = timePoint;
 }
 
@@ -152,5 +153,15 @@ void Conference::printBiddingSummary()
     for (const auto& track : m_tracks)
     {
         track->currentBids();
+    }
+}
+
+void Conference::printReviewSummary()
+{
+    std::cout << "Review Summary" << std::endl;
+    std::cout << "================" << std::endl;
+    for (const auto& track : m_tracks)
+    {
+        track->currentReviews();
     }
 }

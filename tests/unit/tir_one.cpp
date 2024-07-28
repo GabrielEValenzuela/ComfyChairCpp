@@ -236,4 +236,22 @@ TEST_F(TIROne, HandleBidAndReview)
 
     // Check the revision state
     conferenceManager->startRevision(std::chrono::system_clock::now());
+
+    // Check the state of the tracks
+    for (const auto& track : conference->tracks())
+    {
+        testing::internal::CaptureStdout();
+        track->currentState();
+        auto outputCurrentState = testing::internal::GetCapturedStdout();
+        EXPECT_THAT(outputCurrentState, testing::HasSubstr("Review"));
+    }
+
+    // Handle the review for the articles
+    for (const auto& track : conference->tracks())
+    {
+        track->handleTrackReview();
+        EXPECT_EQ(track->amountReviews(), 3);
+    }
+
+    conferenceManager->startSelection(std::chrono::system_clock::now());
 }

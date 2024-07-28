@@ -11,6 +11,7 @@
 
 #include "bid.hpp"
 #include "reviewer.hpp"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include <memory>
 

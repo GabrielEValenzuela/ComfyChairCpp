@@ -9,18 +9,12 @@
 #include "bid.hpp"
 #include <iostream>
 
-Bid::Bid(const std::string& title, std::string& reviewerName, BiddingInterest bidType)
-    : m_titleArticle(title), m_bidType(bidType), m_reviewerName(reviewerName)
+Bid::Bid(std::string& reviewerName, BiddingInterest bidType) : m_bidType(bidType), m_reviewerName(reviewerName)
 {
-}
-
-std::string Bid::titleArticle() const
-{
-    return m_titleArticle;
 }
 
 // LCOV_EXCL_START
-BiddingInterest Bid::bidInterest()
+BiddingInterest Bid::biddingInterest()
 {
     return m_bidType;
 }

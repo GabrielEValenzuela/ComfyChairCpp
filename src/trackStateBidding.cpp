@@ -15,10 +15,18 @@ void BiddingStateTrack::handleBidding(const std::vector<std::shared_ptr<Article>
     {
         for (const auto& article : articles)
         {
-            auto interest = reviewer->determineInterest(article->articleName());
+            auto interest = reviewer->determineInterest();
             biddingMap[article] = interest;
         }
     }
+}
+
+void BiddingStateTrack::handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                                     const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                                     std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                                     const std::vector<std::shared_ptr<User>> reviewers)
+{
+    throw TrackStateException("Review is not allowed in bidding state");
 }
 
 const std::string& BiddingStateTrack::stateName()

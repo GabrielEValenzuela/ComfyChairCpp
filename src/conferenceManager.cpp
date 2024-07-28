@@ -9,6 +9,7 @@
 #include "conferenceManager.hpp"
 #include "trackStateBidding.hpp"
 #include "trackStateReception.hpp"
+#include "trackStateReview.hpp"
 
 void ConferenceManager::startBidding(std::chrono::system_clock::time_point time)
 {
@@ -24,7 +25,7 @@ void ConferenceManager::startRevision(std::chrono::system_clock::time_point time
 
     for (auto& track : m_conference->tracks())
     {
-        track->establishState(std::make_unique<ReceptionStateTrack>());
+        track->establishState(std::make_unique<ReviewStateTrack>());
         m_conference->revisionStart(time);
     }
 }
@@ -33,7 +34,6 @@ void ConferenceManager::startSelection(std::chrono::system_clock::time_point tim
 {
     for (auto& track : m_conference->tracks())
     {
-        // track->establishState(std::make_unique<BiddingStateTrack>());
         m_conference->selectionStart(time);
     }
 }

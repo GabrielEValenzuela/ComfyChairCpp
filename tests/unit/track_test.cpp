@@ -132,7 +132,7 @@ TEST_F(TrackTest, RegularTrack)
     testing::internal::CaptureStdout();
     trackRegular->handleTrackReview();
     outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Not implemented yet\n");
+    EXPECT_STREQ(outputCurrentState.c_str(), "Review is not allowed in reception state\n");
 }
 
 TEST_F(TrackTest, WorkshopTrack)
@@ -226,7 +226,7 @@ TEST_F(TrackTest, WorkshopTrack)
     testing::internal::CaptureStdout();
     trackWorkshop->handleTrackReview();
     outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Not implemented yet\n");
+    EXPECT_STREQ(outputCurrentState.c_str(), "Review is not allowed in reception state\n");
 }
 
 TEST_F(TrackTest, PosterTrack)
@@ -319,7 +319,7 @@ TEST_F(TrackTest, PosterTrack)
     testing::internal::CaptureStdout();
     trackPoster->handleTrackReview();
     outputCurrentState = testing::internal::GetCapturedStdout();
-    EXPECT_STREQ(outputCurrentState.c_str(), "Not implemented yet\n");
+    EXPECT_STREQ(outputCurrentState.c_str(), "Review is not allowed in reception state\n");
 }
 
 TEST_F(TrackTest, TrackOperations)

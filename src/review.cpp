@@ -7,35 +7,24 @@
  */
 
 #include "review.hpp"
+#include <iostream>
 
-std::string Review::titleArticle() const
-{
-    return m_titleArticle;
-}
-
-/**
- * @brief Getter for the text of the review.
- * @return The text of the review.
- */
-std::string Review::text()
+std::string Review::reviewText()
 {
     return m_text;
 }
 
-/**
- * @brief Getter for the rating of the review.
- * @return The rating of the review.
- */
 Rating Review::rating()
 {
     return m_rating;
 }
 
-/**
- * @brief Setter for the rating of the review.
- * @param rating The new rating for the review.
- */
 void Review::rating(Rating rating)
 {
     m_rating = rating;
+}
+
+void Review::printReview() const
+{
+    std::cout << m_text << "\tRating: " << static_cast<int>(m_rating) << std::endl;
 }

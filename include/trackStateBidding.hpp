@@ -39,6 +39,18 @@ class BiddingStateTrack : public ITrackState
                        const std::vector<std::shared_ptr<User>> reviewers) override;
 
     /**
+     * @brief Operate in a CUD way to review an article.
+     * @param articles The articles to bid.
+     * @param reviewMap The map of articles and their bidding interests.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param reviewers The reviewers that are making the review.
+     */
+    void handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                      const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                      std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                      const std::vector<std::shared_ptr<User>> reviewers) override;
+
+    /**
      * @brief Get the state's name.
      * @return The state's name.
      */

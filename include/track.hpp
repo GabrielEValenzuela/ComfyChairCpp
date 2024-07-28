@@ -86,6 +86,17 @@ class Track
     virtual void currentBids() const = 0;
 
     /**
+     * @brief Get the amount of reviews on the track
+     * @return Number of reviews
+     */
+    virtual size_t amountReviews() const = 0;
+
+    /**
+     * @brief Prints the current reviews of the track.
+     */
+    virtual void currentReviews() const = 0;
+
+    /**
      * @brief Add a reviewer to the track.
      */
     virtual void addReviewer(const std::shared_ptr<User> reviewer) = 0;

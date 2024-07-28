@@ -86,6 +86,17 @@ class TrackPoster : public Track
     void currentBids() const override;
 
     /**
+     * @brief Get the amount of reviews on the track
+     * @return Number of reviews
+     */
+    size_t amountReviews() const override;
+
+    /**
+     * @brief Prints the current reviews of the track.
+     */
+    void currentReviews() const override;
+
+    /**
      * @brief Add a reviewer to the track.
      */
     void addReviewer(const std::shared_ptr<User> reviewer) override;
@@ -98,6 +109,7 @@ class TrackPoster : public Track
     std::shared_ptr<ITrackState> m_currentState;              ///< The track's state.
     std::unordered_map<std::shared_ptr<Article>, Bid>
         m_articleBidding; ///< Relation between article and bidding interest.
+    std::unordered_map<std::shared_ptr<Article>, Review> m_articleReviews; ///< Relation between article and review.
 };
 
 #endif // TRACK_POSTER_HPP

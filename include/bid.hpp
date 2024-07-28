@@ -37,27 +37,20 @@ class Bid
 
     /**
      * @brief Parameterized constructor.
-     * @param title The title of the article.
+     * @param reviewerName The reviewer who made the bid.
      * @param bidType The bid type.
      */
-    Bid(const std::string& title, std::string& reviewerName, BiddingInterest bidType);
+    Bid(std::string& reviewerName, BiddingInterest bidType);
 
     /**
      * @brief Destructor.
      */
     ~Bid() = default;
-
-    /**
-     * @brief Getter for the title of the article.
-     * @return The title of the article.
-     */
-    std::string titleArticle() const;
-
     /**
      * @brief Getter for the bid type.
      * @return The bid type.
      */
-    BiddingInterest bidInterest();
+    BiddingInterest biddingInterest();
 
     /**
      * @brief Setter for the bidding interest.
@@ -69,6 +62,14 @@ class Bid
      * @brief Display the bid summary.
      */
     void bidSummary() const;
+
+    /**
+     * @brief Overload the less than operator.
+     */
+    bool operator>(const Bid& other) const
+    {
+        return this->m_bidType > other.m_bidType;
+    }
 
   private:
     std::string m_titleArticle; /**< The title of the article. */

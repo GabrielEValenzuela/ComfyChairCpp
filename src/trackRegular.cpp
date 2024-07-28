@@ -49,7 +49,14 @@ void TrackRegular::handleTrackBidding()
 
 void TrackRegular::handleTrackReview()
 {
-    std::cout << "Not implemented yet" << std::endl; // ToDo Implement this method
+    try
+    {
+        m_currentState->handleReview(m_articles, m_articleBidding, m_articleReviews, m_reviewers);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 const std::string& TrackRegular::trackName() const
@@ -89,5 +96,19 @@ void TrackRegular::currentBids() const
     {
         std::cout << "The article '" << article.first->articleName() << "' has the following biddings:" << std::endl;
         article.second.bidSummary();
+    }
+}
+
+size_t TrackRegular::amountReviews() const
+{
+    return m_articleReviews.size();
+}
+
+void TrackRegular::currentReviews() const
+{
+    for (const auto& article : m_articleReviews)
+    {
+        std::cout << "The article '" << article.first->articleName() << "' has the following reviews:" << std::endl;
+        article.second.printReview();
     }
 }

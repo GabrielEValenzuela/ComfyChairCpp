@@ -7,6 +7,8 @@
  */
 
 #include "user.hpp"
+#include "review.hpp"
+
 #include <iostream>
 
 User::User(const nlohmann::json& userJson)
@@ -44,7 +46,12 @@ bool User::isAuthor()
     return m_isAuthor;
 }
 
-Bid User::determineInterest(const std::string& title)
+Bid User::determineInterest()
 {
     throw std::runtime_error("Regular user can't bid");
+}
+
+Review User::reviewArticle()
+{
+    throw std::runtime_error("Regular user can't review");
 }

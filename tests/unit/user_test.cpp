@@ -36,5 +36,5 @@ TEST_F(UserTest, UserCreation)
     EXPECT_EQ(user->email(), "marven@tyh.com");
     EXPECT_EQ(user->isChair(), false);
     EXPECT_EQ(user->isAuthor(), false);
-    EXPECT_THROW(user->determineInterest("Test"), std::runtime_error);
+    EXPECT_THROW(user->determineInterest(), std::runtime_error);
 }

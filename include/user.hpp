@@ -11,6 +11,7 @@
 
 #include "bid.hpp"
 #include "nlohmann/json.hpp"
+#include "review.hpp"
 #include <string>
 
 /**
@@ -73,7 +74,14 @@ class User
      *
      * @note This method is pure virtual and must be implemented by the derived classes.
      */
-    virtual Bid determineInterest(const std::string& title);
+    virtual Bid determineInterest();
+
+    /**
+     * @brief Make a review for an article
+     *
+     * @note This method is pure virtual and must be implemented by the derived classes.
+     */
+    virtual Review reviewArticle();
 
   protected:
     std::string m_fullNames;   /**< The full name of the user. */

@@ -56,7 +56,12 @@ class Reviewer : public User
     /**
      * @brief Places a bid
      */
-    Bid determineInterest(const std::string& title) override;
+    Bid determineInterest() override;
+
+    /**
+     * @brief Reviews an article
+     */
+    Review reviewArticle() override;
 
     /**
      * @brief Performs a review operation on the given review.

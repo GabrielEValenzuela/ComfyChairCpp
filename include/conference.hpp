@@ -96,6 +96,11 @@ class Conference
      */
     void printBiddingSummary();
 
+    /**
+     * @brief Print the revision summary.
+     */
+    void printReviewSummary();
+
   private:
     std::chrono::system_clock::time_point parseDate(const std::string& dateStr);
     std::vector<std::shared_ptr<User>> m_users;
