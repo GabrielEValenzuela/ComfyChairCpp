@@ -127,7 +127,7 @@ class TrackPoster : public Track
     std::vector<std::shared_ptr<User>> m_reviewers;           ///< The users in the track.
     std::vector<std::shared_ptr<Article>> m_selectedArticles; ///< The selected articles in the track.
     std::shared_ptr<ITrackState> m_currentState;              ///< The track's state.
-     std::shared_ptr<SelectionStrategy> m_selectionStrategy; ///< The selection strategy.
+    std::shared_ptr<SelectionStrategy> m_selectionStrategy;   ///< The selection strategy.
     std::unordered_map<std::shared_ptr<Article>, Bid>
         m_articleBidding; ///< Relation between article and bidding interest.
     std::unordered_map<std::shared_ptr<Article>, Review> m_articleReviews; ///< Relation between article and review.

@@ -9,9 +9,9 @@
 #ifndef TRACK_STATE_SELECTION_HPP
 #define TRACK_STATE_SELECTION_HPP
 
+#include "itrackState.hpp"
 #include "review.hpp"
 #include "selectionStrategy.hpp"
-#include "trackStateInterface.hpp"
 
 /**
  * @brief ITrackState is an interface class that defines the methods that a track must implement.
@@ -36,9 +36,9 @@ class TrackStateSelection : public ITrackState
      * @param interest The interest to set.
      * @param operation The operation to perform.
      */
-    void handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                       const std::shared_ptr<Article>& article, BiddingInterest interest,
-                       OperationType operation) override;
+    void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
+                       std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                       const std::vector<std::shared_ptr<User>> reviewers) override;
 
     /**
      * @brief Handles the selection of articles based on the provided parameters.

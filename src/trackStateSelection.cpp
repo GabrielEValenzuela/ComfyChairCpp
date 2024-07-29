@@ -9,9 +9,9 @@
 #include "trackStateSelection.hpp"
 #include "review.hpp"
 
-void TrackStateSelection::handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                                        const std::shared_ptr<Article>& article, BiddingInterest interest,
-                                        OperationType operation)
+void TrackStateSelection::handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
+                                        std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                                        const std::vector<std::shared_ptr<User>> reviewers)
 {
     throw TrackStateException("Bidding is not allowed in selection state");
 }

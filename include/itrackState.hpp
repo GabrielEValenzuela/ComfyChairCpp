@@ -11,8 +11,8 @@
 
 #include "articleInterface.hpp"
 #include "bid.hpp"
-#include "selectionStrategy.hpp"
 #include "review.hpp"
+#include "selectionStrategy.hpp"
 #include "trackStateException.hpp"
 #include "user.hpp"
 #include <memory>

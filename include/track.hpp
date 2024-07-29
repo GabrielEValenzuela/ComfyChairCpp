@@ -10,9 +10,8 @@
 #define TRACK_HPP
 
 #include "articleInterface.hpp"
-#include "selectionStrategy.hpp"
-#include "trackStateInterface.hpp"
 #include "itrackState.hpp"
+#include "selectionStrategy.hpp"
 #include "user.hpp"
 #include <memory>
 #include <string>

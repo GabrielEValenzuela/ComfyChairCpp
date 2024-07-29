@@ -13,6 +13,13 @@ void ReviewStateTrack::handleBidding(const std::vector<std::shared_ptr<Article>>
     throw TrackStateException("Bidding is not allowed in review state");
 }
 
+void ReviewStateTrack::handleSelection(
+    std::vector<std::shared_ptr<Article>> selectedArticles, std::shared_ptr<SelectionStrategy> selectionStrategy,
+    std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number)
+{
+    throw TrackStateException("Cannot handle selection in review state");
+}
+
 void ReviewStateTrack::handleReview(const std::vector<std::shared_ptr<Article>>& articles,
                                     const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
                                     std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
