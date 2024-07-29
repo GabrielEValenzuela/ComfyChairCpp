@@ -21,7 +21,7 @@ TEST_F(UserTest, UserCreation)
 {
     const auto& jsonUser = R"(
     {
-            "fullNames": "Martin Venturino",
+            "name": "Martin Venturino",
             "affiliation": "Tecnicas y herramientas",
             "email": "marven@tyh.com",
             "password": "https://bit.ly/example2"
@@ -32,4 +32,9 @@ TEST_F(UserTest, UserCreation)
 
     EXPECT_TRUE(user != nullptr);
     EXPECT_EQ(user->fullNames(), "Martin Venturino");
+    EXPECT_EQ(user->affiliation(), "Tecnicas y herramientas");
+    EXPECT_EQ(user->email(), "marven@tyh.com");
+    EXPECT_EQ(user->isChair(), false);
+    EXPECT_EQ(user->isAuthor(), false);
+    EXPECT_THROW(user->determineInterest(), std::runtime_error);
 }

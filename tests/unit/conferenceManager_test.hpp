@@ -36,8 +36,6 @@ class ConferenceManagerTest : public ::testing::Test
      */
     void TearDown() override;
     // LCOV_EXCL_STOP
-
-    std::shared_ptr<ConferenceManager> conferenceManager; /**< The conferenceManager. */
 };
 
 #endif // CONFERENCE_MANAGER_HPP

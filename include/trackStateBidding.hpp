@@ -9,8 +9,8 @@
 #ifndef TRACK_STATE_BIDDING_HPP
 #define TRACK_STATE_BIDDING_HPP
 
+#include "itrackState.hpp"
 #include "track.hpp"
-#include "trackStateInterface.hpp"
 
 /**
  * @brief Bidding state class that represents the state of a track in the conference.
@@ -30,14 +30,25 @@ class BiddingStateTrack : public ITrackState
 
     /**
      * @brief Operate in a CUD way to bidding an article.
-     * @param interestMap The map of articles and their bidding interests.
-     * @param article The article.
-     * @param interest The interest to set.
-     * @param operation The operation to perform.
+     * @param articles The articles to bid.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param reviewers The reviewers that are bidding.
      */
-    virtual void handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                               const std::shared_ptr<Article>& article, BiddingInterest interest,
-                               OperationType operation) override;
+    void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
+                       std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                       const std::vector<std::shared_ptr<User>> reviewers) override;
+
+    /**
+     * @brief Operate in a CUD way to review an article.
+     * @param articles The articles to bid.
+     * @param reviewMap The map of articles and their bidding interests.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param reviewers The reviewers that are making the review.
+     */
+    void handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                      const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                      std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                      const std::vector<std::shared_ptr<User>> reviewers) override;
 
     /**
      * @brief Handles the selection of articles based on the provided parameters.
@@ -65,7 +76,7 @@ class BiddingStateTrack : public ITrackState
      * @param article The article.
      * @param interest The interest to set.
      */
-    void updateBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
+    void updateBidding(std::unordered_map<std::shared_ptr<Article>, Bid>& interestMap,
                        const std::shared_ptr<Article>& article, BiddingInterest interest);
 
     /**
@@ -74,7 +85,7 @@ class BiddingStateTrack : public ITrackState
      * @param article The article.
      * @param interest The interest to remove.
      */
-    void removeBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
+    void removeBidding(std::unordered_map<std::shared_ptr<Article>, Bid>& interestMap,
                        const std::shared_ptr<Article>& article, BiddingInterest interest);
 };
 

@@ -16,8 +16,23 @@ doxygen -s ${CONFIG_FILE} 2>${ERROR_FILE_FLAG}
 cd build
 cmake -GNinja -DRUN_COVERAGE=1 ..
 ninja
+
+if [ $? -ne 0 ]; then
+    echo "Error: Build failed"
+    exit 1
+fi
+
 ctest tests
+
+if [ $? -ne 0 ]; then
+    echo "Error: Test failed"
+    cd ..
+    exit 1
+fi
+
 cd ..
+
+
 
 if [ -s $ERROR_FILE_FLAG ]; then
     echo "Error: There are some files that are not documented correctly"

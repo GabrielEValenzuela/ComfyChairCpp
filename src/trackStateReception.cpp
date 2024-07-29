@@ -69,9 +69,9 @@ void ReceptionStateTrack::removeArticle(std::vector<std::shared_ptr<Article>>& a
     // LCOV_EXCL_STOP
 }
 
-void ReceptionStateTrack::handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                                        const std::shared_ptr<Article>& article, BiddingInterest interest,
-                                        OperationType operation)
+void ReceptionStateTrack::handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
+                                        std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                                        const std::vector<std::shared_ptr<User>> reviewers)
 {
     throw TrackStateException("Bidding is not allowed in reception state");
 }
@@ -81,4 +81,12 @@ void ReceptionStateTrack::handleSelection(
     std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number)
 {
     throw TrackStateException("Cannot handle selection in Reception state");
+}
+
+void ReceptionStateTrack::handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                                       const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                                       std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                                       const std::vector<std::shared_ptr<User>> reviewers)
+{
+    throw TrackStateException("Review is not allowed in reception state");
 }

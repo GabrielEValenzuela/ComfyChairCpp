@@ -12,7 +12,9 @@
 #include "articleInterface.hpp"
 #include "bid.hpp"
 #include "selectionStrategy.hpp"
+#include "review.hpp"
 #include "trackStateException.hpp"
+#include "user.hpp"
 #include <memory>
 #include <string>
 
@@ -53,14 +55,25 @@ class ITrackState
 
     /**
      * @brief Operate in a CUD way to bidding an article.
-     * @param interestMap The map of articles and their bidding interests.
-     * @param article The article.
-     * @param interest The interest to set.
-     * @param operation The operation to perform.
+     * @param articles The articles to bid.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param reviewers The reviewers that are bidding.
      */
-    virtual void handleBidding(std::unordered_map<std::shared_ptr<Article>, BiddingInterest>& interestMap,
-                               const std::shared_ptr<Article>& article, BiddingInterest interest,
-                               OperationType operation) = 0;
+    virtual void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
+                               std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                               const std::vector<std::shared_ptr<User>> reviewers) = 0;
+
+    /**
+     * @brief Operate in a CUD way to review an article.
+     * @param articles The articles to bid.
+     * @param reviewMap The map of articles and their bidding interests.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param reviewers The reviewers that are making the review.
+     */
+    virtual void handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                              const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                              std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                              const std::vector<std::shared_ptr<User>> reviewers) = 0;
 
     /**
      * @brief Handles the selection of articles based on the provided parameters.

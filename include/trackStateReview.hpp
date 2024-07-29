@@ -6,8 +6,8 @@
  * MIT License
  */
 
-#ifndef TRACK_STATE_RECEPTION_HPP
-#define TRACK_STATE_RECEPTION_HPP
+#ifndef TRACK_STATE_REVIEW_HPP
+#define TRACK_STATE_REVIEW_HPP
 
 #include "bid.hpp"
 #include "itrackState.hpp"
@@ -16,7 +16,7 @@
 /**
  * @brief ITrackState is an interface class that defines the methods that a track must implement.
  */
-class ReceptionStateTrack : public ITrackState
+class ReviewStateTrack : public ITrackState
 {
   public:
     /**
@@ -52,38 +52,13 @@ class ReceptionStateTrack : public ITrackState
                       const std::vector<std::shared_ptr<User>> reviewers) override;
 
     /**
-     * @brief Handles the selection of articles based on the provided parameters.
-     * @param selectedArticles A vector of shared pointers to the selected articles.
-     * @param selectionStrategy A shared pointer to the selection strategy to be used.
-     * @param articuleRatingMap An unordered map that maps articles to their corresponding ratings.
-     * @param number An integer representing the number of articles to be selected.
-     */
-    virtual void handleSelection(
-        std::vector<std::shared_ptr<Article>> selectedArticles, std::shared_ptr<SelectionStrategy> selectionStrategy,
-        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number) override;
-
-    /**
      * @brief Get the state's name.
      * @return The state's name.
      */
     const std::string& stateName() override;
 
   private:
-    std::string m_stateName{"Reception"}; // The state's name.
-
-    /**
-     * @brief Updates an article in the track.
-     * @param articles The list of articles to modify.
-     * @param article The article to update.
-     */
-    void updateArticle(std::vector<std::shared_ptr<Article>>& articles, const std::shared_ptr<Article>& article);
-
-    /**
-     * @brief Removes an article from the track.
-     * @param articles The list of articles to modify.
-     * @param article The article to remove.
-     */
-    void removeArticle(std::vector<std::shared_ptr<Article>>& articles, const std::shared_ptr<Article>& article);
+    std::string m_stateName{"Review"}; // The state's name.
 };
 
 #endif // TRACK_STATE_INTERFACE_HPP

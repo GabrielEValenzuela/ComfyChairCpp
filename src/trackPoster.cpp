@@ -34,12 +34,11 @@ void TrackPoster::handleTrackArticle(const std::shared_ptr<Article>& article, Op
     }
 }
 
-void TrackPoster::handleTrackBidding(const std::shared_ptr<Article>& article, BiddingInterest interest,
-                                     OperationType operation)
+void TrackPoster::handleTrackBidding()
 {
     try
     {
-        m_currentState->handleBidding(m_articleBidding, article, interest, operation);
+        m_currentState->handleBidding(m_articles, m_articleBidding, m_reviewers);
     }
     catch (const TrackStateException& e)
     {
@@ -47,10 +46,16 @@ void TrackPoster::handleTrackBidding(const std::shared_ptr<Article>& article, Bi
     }
 }
 
-void TrackPoster::handleTrackReview(const std::shared_ptr<Article>& article, const std::string& review,
-                                    OperationType operation)
+void TrackPoster::handleTrackReview()
 {
-    std::cout << "Not implemented yet" << std::endl; // ToDo Implement this method
+    try
+    {
+        m_currentState->handleReview(m_articles, m_articleBidding, m_articleReviews, m_reviewers);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void TrackPoster::handleTrackSelection(
@@ -93,4 +98,37 @@ void TrackPoster::selectionStrategy(const std::shared_ptr<SelectionStrategy>& st
 std::vector<std::shared_ptr<Article>> TrackPoster::selectedArticles()
 {
     return m_selectedArticles;
+}
+
+size_t TrackPoster::amountBids() const
+{
+    return m_articleBidding.size();
+}
+
+void TrackPoster::addReviewer(const std::shared_ptr<User> reviewer)
+{
+    m_reviewers.push_back(reviewer);
+}
+
+void TrackPoster::currentBids() const
+{
+    for (const auto& article : m_articleBidding)
+    {
+        std::cout << "The article '" << article.first->articleName() << "' has the following biddings:" << std::endl;
+        article.second.bidSummary();
+    }
+}
+
+size_t TrackPoster::amountReviews() const
+{
+    return m_articleReviews.size();
+}
+
+void TrackPoster::currentReviews() const
+{
+    for (const auto& article : m_articleReviews)
+    {
+        std::cout << "The article '" << article.first->articleName() << "' has the following reviews:" << std::endl;
+        article.second.printReview();
+    }
 }

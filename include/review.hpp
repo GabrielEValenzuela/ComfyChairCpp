@@ -41,31 +41,23 @@ class Review
 
     /**
      * @brief Parameterized constructor.
-     * @param titleArticle The title of the article.
      * @param text The text of the review.
      * @param rating The rating of the review.
      */
-    Review(const std::string& titleArticle, const std::string& text, Rating rating)
-        : m_titleArticle(titleArticle), m_text(text), m_rating(rating)
+    Review(const std::string& text, Rating rating) : m_text(text), m_rating(rating)
     {
     }
 
     /**
      * @brief Destructor.
      */
-    virtual ~Review() = default;
-
-    /**
-     * @brief Getter for the title of the article.
-     * @return The title of the article.
-     */
-    std::string titleArticle();
+    ~Review() = default;
 
     /**
      * @brief Getter for the text of the review.
      * @return The text of the review.
      */
-    std::string text();
+    std::string reviewText();
 
     /**
      * @brief Getter for the rating of the review.
@@ -79,8 +71,12 @@ class Review
      */
     void rating(Rating rating);
 
+    /**
+     * @brief Display the review.
+     */
+    void printReview() const;
+
   private:
-    std::string m_titleArticle;
     std::string m_text;
     Rating m_rating;
 };
