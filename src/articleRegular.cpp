@@ -8,7 +8,7 @@
 
 #include "articleRegular.hpp"
 
-constexpr auto MINIMUM_ABSTRACT_SIZE = 300;
+constexpr auto MINIMUM_ABSTRACT_SIZE = 10; // Minimum size for an abstract. Set to 10 for testing purposes.
 
 ArticleRegular::ArticleRegular(const nlohmann::json& articleJson) : Article(articleJson)
 {

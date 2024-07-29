@@ -1,27 +1,33 @@
 /*
  * ComfyChair
  * Copyright (C) 2024, M. Venturino, G. Valenzuela
- * July 13, 2024.
+ * July 25, 2024.
  *
  * MIT License
  */
 
-#ifndef _EXAMPLE_CLASS_TEST_HPP
-#define _EXAMPLE_CLASS_TEST_HPP
+#ifndef TIR_ONE_HPP_
+#define TIR_ONE_HPP_
 
-#include "exampleClass.hpp"
+#include "articleInterface.hpp"
+#include "articlePoster.hpp"
+#include "articleRegular.hpp"
+#include "conference.hpp"
+#include "conferenceManager.hpp"
+#include "nlohmann/json.hpp"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 /**
  * @brief Runs unit tests for ExampleClass.
  *
  */
-class ExampleClassTest : public ::testing::Test
+class TIROne : public ::testing::Test
 {
   protected:
     // LCOV_EXCL_START
-    ExampleClassTest() = default;
-    ~ExampleClassTest() = default;
+    TIROne() = default;
+    ~TIROne() = default;
 
     /**
      * @brief Set the environment for testing.
@@ -35,6 +41,8 @@ class ExampleClassTest : public ::testing::Test
      */
     void TearDown() override;
     // LCOV_EXCL_STOP
+
+    nlohmann::json jsonInput;
 };
 
-#endif // _EXAMPLE_CLASS_TEST_HPP
+#endif // TIR_ONE_HPP_

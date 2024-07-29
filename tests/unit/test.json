@@ -1,27 +1,4 @@
-/*
- * ComfyChair
- * Copyright (C) 2024, M. Venturino, G. Valenzuela
- * July 13, 2024.
- *
- * MIT License
- */
-
-#include "conference_test.hpp"
-#include "conference.hpp"
-#include "trackFactory.hpp"
-
-void ConferenceTest::SetUp()
 {
-}
-
-void ConferenceTest::TearDown()
-{
-}
-
-TEST_F(ConferenceTest, ConferenceCreation)
-{
-    const auto& jsonConference = R"(
-  {
     "biddingStart": "2024-07-18T00:00:00Z",
     "revisionStart": "2024-07-18T00:00:00Z",
     "selectionStart": "2024-07-18T00:00:00Z",
@@ -121,11 +98,4 @@ TEST_F(ConferenceTest, ConferenceCreation)
             ]
         }
     ]
-})"_json;
-
-    conference = std::make_shared<Conference>(jsonConference);
-    EXPECT_TRUE(conference != nullptr);
-
-    EXPECT_EQ(conference->sizeParticipants(), 4);
-    EXPECT_EQ(conference->tracks().size(), 2);
 }

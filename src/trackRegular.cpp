@@ -35,12 +35,11 @@ void TrackRegular::handleTrackArticle(const std::shared_ptr<Article>& article, O
     }
 }
 
-void TrackRegular::handleTrackBidding(const std::shared_ptr<Article>& article, BiddingInterest interest,
-                                      OperationType operation)
+void TrackRegular::handleTrackBidding()
 {
     try
     {
-        m_currentState->handleBidding(m_articleBidding, article, interest, operation);
+        m_currentState->handleBidding(m_articles, m_articleBidding, m_reviewers);
     }
     catch (const TrackStateException& e)
     {
@@ -48,10 +47,16 @@ void TrackRegular::handleTrackBidding(const std::shared_ptr<Article>& article, B
     }
 }
 
-void TrackRegular::handleTrackReview(const std::shared_ptr<Article>& article, const std::string& review,
-                                     OperationType operation)
+void TrackRegular::handleTrackReview()
 {
-    std::cout << "Not implemented yet" << std::endl; // ToDo Implement this method
+    try
+    {
+        m_currentState->handleReview(m_articles, m_articleBidding, m_articleReviews, m_reviewers);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 const std::string& TrackRegular::trackName() const
@@ -73,4 +78,37 @@ void TrackRegular::currentState() const
 int TrackRegular::amountArticles() const
 {
     return m_articles.size();
+}
+
+size_t TrackRegular::amountBids() const
+{
+    return m_articleBidding.size();
+}
+
+void TrackRegular::addReviewer(const std::shared_ptr<User> reviewer)
+{
+    m_reviewers.push_back(reviewer);
+}
+
+void TrackRegular::currentBids() const
+{
+    for (const auto& article : m_articleBidding)
+    {
+        std::cout << "The article '" << article.first->articleName() << "' has the following biddings:" << std::endl;
+        article.second.bidSummary();
+    }
+}
+
+size_t TrackRegular::amountReviews() const
+{
+    return m_articleReviews.size();
+}
+
+void TrackRegular::currentReviews() const
+{
+    for (const auto& article : m_articleReviews)
+    {
+        std::cout << "The article '" << article.first->articleName() << "' has the following reviews:" << std::endl;
+        article.second.printReview();
+    }
 }
