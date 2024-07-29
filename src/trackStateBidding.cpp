@@ -7,9 +7,10 @@ void BiddingStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& art
     throw TrackStateException("Cannot handle articles in Bidding state");
 }
 
-void BiddingStateTrack::handleSelection(
-    std::vector<std::shared_ptr<Article>> selectedArticles, std::shared_ptr<SelectionStrategy> selectionStrategy,
-    std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number)
+void BiddingStateTrack::handleSelection(std::vector<std::shared_ptr<Article>>& selectedArticles,
+                                        std::shared_ptr<SelectionStrategy> selectionStrategy,
+                                        std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                        int selectionThreshold)
 {
     throw TrackStateException("Cannot handle selection in Bidding state");
 }

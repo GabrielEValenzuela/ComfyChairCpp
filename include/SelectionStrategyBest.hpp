@@ -22,20 +22,12 @@ class SelectionStrategyBest : public SelectionStrategy
   public:
     /**
      * @brief Selects a number of articles based on a given article-rating map.
-     * @param articuleRatingMap The map containing articles and their corresponding ratings.
-     * @param number The number of articles to select.
+     * @param ratingMap The map containing articles and their corresponding ratings.
+     * @param selectionThreshold The number of articles to select.
      * @return A vector of shared pointers to the selected articles.
      */
-    std::vector<std::shared_ptr<Article>> select(
-        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number) override;
-
-  private:
-    /**
-     * @brief Converts a Rating enum value to its corresponding numerical representation.
-     * @param rating The Rating enum value to be converted.
-     * @return The numerical representation of the Rating enum value.
-     */
-    int convertRatingToNumber(Rating rating);
+    std::vector<std::shared_ptr<Article>> select(std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                                 int selectionThreshold) override;
 };
 
 #endif // SELECTION_STRATEGY_BEST_HPP

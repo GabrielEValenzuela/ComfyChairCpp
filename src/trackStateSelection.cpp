@@ -27,9 +27,10 @@ const std::string& TrackStateSelection::stateName()
     return m_stateName;
 }
 
-void TrackStateSelection::handleSelection(
-    std::vector<std::shared_ptr<Article>> selectedArticles, std::shared_ptr<SelectionStrategy> selectionStrategy,
-    std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number)
+void TrackStateSelection::handleSelection(std::vector<std::shared_ptr<Article>>& selectedArticles,
+                                          std::shared_ptr<SelectionStrategy> selectionStrategy,
+                                          std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                          int selectionThreshold)
 {
-    selectedArticles = selectionStrategy->select(articuleRatingMap, number);
+    selectedArticles = selectionStrategy->select(ratingMap, selectionThreshold);
 }

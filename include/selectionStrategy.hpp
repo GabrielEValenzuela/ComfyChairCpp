@@ -29,12 +29,12 @@ class SelectionStrategy
 
     /**
      * @brief Selects a number of articles based on a given article-rating map.
-     * @param articuleRatingMap The map containing articles and their corresponding ratings.
-     * @param number The number of articles to select.
+     * @param ratingMap The map containing articles and their corresponding ratings.
+     * @param selectionThreshold The number of articles to select.
      * @return A vector of shared pointers to the selected articles.
      */
-    virtual std::vector<std::shared_ptr<Article>> select(
-        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number) = 0;
+    virtual std::vector<std::shared_ptr<Article>> select(std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                                         int selectionThreshold) = 0;
 };
 
 #endif // SELECTION_STRATEGY_HPP

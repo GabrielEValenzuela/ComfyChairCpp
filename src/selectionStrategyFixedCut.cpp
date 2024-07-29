@@ -9,33 +9,29 @@
 #include "SelectionStrategyFixedCut.hpp"
 
 std::vector<std::shared_ptr<Article>> SelectionStrategyFixedCut::select(
-    std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articuleRatingMap, int number)
+    std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap, int selectionThreshold)
 {
-    if (number < 1 || number > 100)
+    if (selectionThreshold <= 0 || selectionThreshold >= 100)
     {
         throw std::out_of_range("Number must be between 1 and 100");
     }
 
-    int numberArticlesToTake = articuleRatingMap.size() * number / 100;
-
-    // Custom comparator function to order the map based on rating
-    auto ratingComparator = [&](const std::shared_ptr<Article>& article1, const std::shared_ptr<Article>& article2) {
-        std::unordered_map<Rating, int> ratingOrder = {
-            {Rating::Excellent, 0}, {Rating::VeryGood, 1}, {Rating::Good, 2},          {Rating::Neutral, 3},
-            {Rating::Bad, 4},       {Rating::VeryBad, 5},  {Rating::NotRecommended, 6}};
-
-        const std::shared_ptr<Rating>& rating1 = articuleRatingMap[article1];
-        const std::shared_ptr<Rating>& rating2 = articuleRatingMap[article2];
-
-        return ratingOrder[*rating1] < ratingOrder[*rating2];
-    };
+    int numberArticlesToTake = ratingMap.size() * selectionThreshold / 100;
 
     // Create a vector of articles from the map
     std::vector<std::shared_ptr<Article>> articles;
-    for (const auto& pair : articuleRatingMap)
+    for (const auto& pair : ratingMap)
     {
         articles.push_back(pair.first);
     }
+
+    // Custom comparator function to order the map based on rating
+    auto ratingComparator = [&](const std::shared_ptr<Article>& article1, const std::shared_ptr<Article>& article2) {
+        const Rating rating1 = ratingMap[article1];
+        const Rating rating2 = ratingMap[article2];
+
+        return static_cast<int>(rating1) < static_cast<int>(rating2);
+    };
 
     // Sort the articles based on rating using the custom comparator
     std::sort(articles.begin(), articles.end(), ratingComparator);
