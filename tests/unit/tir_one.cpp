@@ -16,7 +16,7 @@ void TIROne::TearDown()
 {
 }
 
-TEST_F(TIROne, HandleBidAndReview)
+TEST_F(TIROne, E2E)
 {
     const auto jsonInput = R"(
   {
@@ -218,6 +218,9 @@ TEST_F(TIROne, HandleBidAndReview)
     // Check the bidding process
     conferenceManager->startBidding(std::chrono::system_clock::now());
 
+    auto articleDummy =
+        std::make_shared<ArticleRegular>(jsonInput.at("tracks").at(0).at("articles").at(0)); // Dummy article
+
     // Check the state of the tracks
     for (const auto& track : conference->tracks())
     {
@@ -254,4 +257,39 @@ TEST_F(TIROne, HandleBidAndReview)
     }
 
     conferenceManager->startSelection(std::chrono::system_clock::now());
+
+    // Check the state of the tracks
+    for (const auto& track : conference->tracks())
+    {
+        testing::internal::CaptureStdout();
+        track->currentState();
+        auto outputCurrentState = testing::internal::GetCapturedStdout();
+        EXPECT_THAT(outputCurrentState, testing::HasSubstr("Selection"));
+    }
+
+    // Handle the review for the articles, no strategy
+    for (const auto& track : conference->tracks())
+    {
+        EXPECT_THROW(track->handleTrackSelection(0), std::runtime_error);
+    }
+
+    auto strategyCut = std::make_shared<SelectionStrategyFixedCut>();
+
+    // Handle the review for the articles, with strategy of cut
+    for (const auto& track : conference->tracks())
+    {
+        track->selectionStrategy(strategyCut);
+        track->handleTrackSelection(100); // Take all
+        EXPECT_FALSE(track->selectedArticles().empty());
+    }
+
+    auto strategyBest = std::make_shared<SelectionStrategyBest>();
+
+    // Handle the review for the articles, with strategy of cut
+    for (const auto& track : conference->tracks())
+    {
+        track->selectionStrategy(strategyBest);
+        track->handleTrackSelection(-3); // Take all
+        EXPECT_FALSE(track->selectedArticles().empty());
+    }
 }

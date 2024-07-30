@@ -6,17 +6,19 @@
  * MIT License
  */
 
-#include "SelectionStrategyBest.hpp"
+#include "selectionStrategyBest.hpp"
 
-std::vector<std::shared_ptr<Article>> SelectionStrategyBest::select(
-    std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap, int selectionThreshold)
+void SelectionStrategyBest::select(std::vector<std::shared_ptr<Article>>& selectedArticles,
+                                   std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                   int selectionThreshold)
 {
     if (selectionThreshold < -3 || selectionThreshold > 3)
     {
         throw std::runtime_error("Number is not within the valid range of -3 to +3.");
     }
 
-    std::vector<std::shared_ptr<Article>> selectedArticles;
+    selectedArticles.clear(); // Clear any existing articles
+
     for (const auto& pair : ratingMap)
     {
         if (static_cast<int>(pair.second) >= selectionThreshold)
@@ -24,6 +26,4 @@ std::vector<std::shared_ptr<Article>> SelectionStrategyBest::select(
             selectedArticles.push_back(pair.first);
         }
     }
-
-    return selectedArticles;
 }
