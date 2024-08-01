@@ -30,11 +30,10 @@ class TrackStateSelection : public ITrackState
                        OperationType operation) override;
 
     /**
-     * @brief Operate in a CUD way to bidding an article.
-     * @param interestMap The map of articles and their bidding interests.
-     * @param article The article.
-     * @param interest The interest to set.
-     * @param operation The operation to perform.
+     * Handles the bidding process for a list of articles.
+     * @param articles The vector of articles to be bid on.
+     * @param biddingMap The unordered map of articles to bids.
+     * @param reviewers The vector of reviewers participating in the bidding process.
      */
     void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
                        std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,

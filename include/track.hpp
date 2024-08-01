@@ -54,7 +54,6 @@ class Track
 
     /**
      * @brief Handles the selection of a track.
-     * @param articleRatingMap The unordered map of articles and their ratings.
      * @param threshold The track number to be selected.
      */
     virtual void handleTrackSelection(int threshold) = 0;
