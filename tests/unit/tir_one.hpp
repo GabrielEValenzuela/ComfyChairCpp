@@ -15,6 +15,8 @@
 #include "conference.hpp"
 #include "conferenceManager.hpp"
 #include "nlohmann/json.hpp"
+#include "selectionStrategyBest.hpp"
+#include "selectionStrategyFixedCut.hpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 

@@ -6,17 +6,17 @@
  * MIT License
  */
 
-#ifndef TRACK_STATE_REVIEW_HPP
-#define TRACK_STATE_REVIEW_HPP
+#ifndef TRACK_STATE_SELECTION_HPP
+#define TRACK_STATE_SELECTION_HPP
 
-#include "bid.hpp"
 #include "itrackState.hpp"
-#include "track.hpp"
+#include "review.hpp"
+#include "selectionStrategy.hpp"
 
 /**
  * @brief ITrackState is an interface class that defines the methods that a track must implement.
  */
-class ReviewStateTrack : public ITrackState
+class TrackStateSelection : public ITrackState
 {
   public:
     /**
@@ -30,10 +30,10 @@ class ReviewStateTrack : public ITrackState
                        OperationType operation) override;
 
     /**
-     * @brief Operate in a CUD way to bidding an article.
-     * @param articles The articles to bid.
-     * @param biddingMap The map of articles and their bidding interests.
-     * @param reviewers The reviewers that are bidding.
+     * Handles the bidding process for a list of articles.
+     * @param articles The vector of articles to be bid on.
+     * @param biddingMap The unordered map of articles to bids.
+     * @param reviewers The vector of reviewers participating in the bidding process.
      */
     void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
                        std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
@@ -72,7 +72,7 @@ class ReviewStateTrack : public ITrackState
     const std::string& stateName() override;
 
   private:
-    std::string m_stateName{"Review"}; // The state's name.
+    std::string m_stateName{"Selection"}; // The state's name.
 };
 
-#endif // TRACK_STATE_INTERFACE_HPP
+#endif // TRACK_STATE_SELECTION_HPP

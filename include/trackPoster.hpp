@@ -52,6 +52,12 @@ class TrackPoster : public Track
     void handleTrackReview() override;
 
     /**
+     * @brief Handles the selection of a track.
+     * @param threshold The track number to be selected.
+     */
+    void handleTrackSelection(int threshold) override;
+
+    /**
      * @brief Get the track's name.
      * @return The track's name.
      */
@@ -73,6 +79,18 @@ class TrackPoster : public Track
      * @return Number of articles
      */
     int amountArticles() const override;
+
+    /**
+     * @brief Sets the selection strategy for the track poster.
+     * @param strategy A shared pointer to the selection strategy to be set.
+     */
+    void selectionStrategy(const std::shared_ptr<SelectionStrategy>& strategy) override;
+
+    /**
+     * @brief Get the selected articles in the track.
+     * @return A vector of shared pointers to the selected articles.
+     */
+    std::vector<std::shared_ptr<Article>> selectedArticles() override;
 
     /**
      * @brief Get the amount of bids on the track
@@ -107,9 +125,12 @@ class TrackPoster : public Track
     std::vector<std::shared_ptr<User>> m_reviewers;           ///< The users in the track.
     std::vector<std::shared_ptr<Article>> m_selectedArticles; ///< The selected articles in the track.
     std::shared_ptr<ITrackState> m_currentState;              ///< The track's state.
+    std::shared_ptr<SelectionStrategy> m_selectionStrategy;   ///< The selection strategy.
     std::unordered_map<std::shared_ptr<Article>, Bid>
         m_articleBidding; ///< Relation between article and bidding interest.
-    std::unordered_map<std::shared_ptr<Article>, Review> m_articleReviews; ///< Relation between article and review.
+    std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>
+        m_articleReviews;                                                 ///< Relation between article and review.
+    std::unordered_map<std::shared_ptr<Article>, Rating> m_articleRating; ///< Relation between article and rating.
 };
 
 #endif // TRACK_POSTER_HPP

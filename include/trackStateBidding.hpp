@@ -43,12 +43,26 @@ class BiddingStateTrack : public ITrackState
      * @param articles The articles to bid.
      * @param reviewMap The map of articles and their bidding interests.
      * @param biddingMap The map of articles and their bidding interests.
+     * @param averageRatings The average ratings of the articles.
      * @param reviewers The reviewers that are making the review.
      */
     void handleReview(const std::vector<std::shared_ptr<Article>>& articles,
                       const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
-                      std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                      std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
+                      std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
                       const std::vector<std::shared_ptr<User>> reviewers) override;
+
+    /**
+     * @brief Handles the selection of articles based on the provided parameters.
+     * @param selectedArticles A vector of shared pointers to the selected articles.
+     * @param selectionStrategy A shared pointer to the selection strategy to be used.
+     * @param ratingMap An unordered map that maps articles to their corresponding ratings.
+     * @param selectionThreshold An integer representing the number of articles to be selected.
+     */
+    virtual void handleSelection(std::vector<std::shared_ptr<Article>>& selectedArticles,
+                                 std::shared_ptr<SelectionStrategy> selectionStrategy,
+                                 std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                 int selectionThreshold) override;
 
     /**
      * @brief Get the state's name.

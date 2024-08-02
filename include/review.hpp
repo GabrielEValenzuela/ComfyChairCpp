@@ -17,13 +17,13 @@
  */
 enum class Rating
 {
-    Excellent,
-    VeryGood,
-    Good,
-    Neutral,
-    Bad,
-    VeryBad,
-    NotRecommended,
+    Excellent = 3,
+    VeryGood = 2,
+    Good = 1,
+    Neutral = 0,
+    Bad = -1,
+    VeryBad = -2,
+    NotRecommended = -3,
 };
 
 /**
@@ -63,7 +63,7 @@ class Review
      * @brief Getter for the rating of the review.
      * @return The rating of the review.
      */
-    Rating rating();
+    Rating rating() const;
 
     /**
      * @brief Setter for the rating of the review.

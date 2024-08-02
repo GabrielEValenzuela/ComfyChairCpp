@@ -11,6 +11,7 @@
 
 #include "articleInterface.hpp"
 #include "itrackState.hpp"
+#include "selectionStrategy.hpp"
 #include "user.hpp"
 #include <memory>
 #include <string>
@@ -52,6 +53,12 @@ class Track
     virtual void handleTrackReview() = 0;
 
     /**
+     * @brief Handles the selection of a track.
+     * @param threshold The track number to be selected.
+     */
+    virtual void handleTrackSelection(int threshold) = 0;
+
+    /**
      * @brief Get the track's name.
      * @return The track's name.
      */
@@ -73,6 +80,18 @@ class Track
      * @return Number of articles
      */
     virtual int amountArticles() const = 0;
+
+    /**
+     * @brief Sets the selection strategy for the track.
+     * @param strategy A shared pointer to the selection strategy to be set.
+     */
+    virtual void selectionStrategy(const std::shared_ptr<SelectionStrategy>& strategy) = 0;
+
+    /**
+     * @brief Get the selected articles in the track.
+     * @return A vector of shared pointers to the selected articles.
+     */
+    virtual std::vector<std::shared_ptr<Article>> selectedArticles() = 0;
 
     /**
      * @brief Get the amount of bids on the track

@@ -76,9 +76,18 @@ void ReceptionStateTrack::handleBidding(const std::vector<std::shared_ptr<Articl
     throw TrackStateException("Bidding is not allowed in reception state");
 }
 
+void ReceptionStateTrack::handleSelection(std::vector<std::shared_ptr<Article>>& selectedArticles,
+                                          std::shared_ptr<SelectionStrategy> selectionStrategy,
+                                          std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                          int selectionThreshold)
+{
+    throw TrackStateException("Cannot handle selection in Reception state");
+}
+
 void ReceptionStateTrack::handleReview(const std::vector<std::shared_ptr<Article>>& articles,
                                        const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
-                                       std::unordered_map<std::shared_ptr<Article>, Review>& reviewMap,
+                                       std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
+                                       std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
                                        const std::vector<std::shared_ptr<User>> reviewers)
 {
     throw TrackStateException("Review is not allowed in reception state");
