@@ -30,15 +30,28 @@ class TrackStateSelection : public ITrackState
                        OperationType operation) override;
 
     /**
-     * @brief Operate in a CUD way to bidding an article.
-     * @param interestMap The map of articles and their bidding interests.
-     * @param article The article.
-     * @param interest The interest to set.
-     * @param operation The operation to perform.
+     * Handles the bidding process for a list of articles.
+     * @param articles The vector of articles to be bid on.
+     * @param biddingMap The unordered map of articles to bids.
+     * @param reviewers The vector of reviewers participating in the bidding process.
      */
     void handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
                        std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
                        const std::vector<std::shared_ptr<User>> reviewers) override;
+
+    /**
+     * @brief Operate in a CUD way to review an article.
+     * @param articles The articles to bid.
+     * @param reviewMap The map of articles and their bidding interests.
+     * @param biddingMap The map of articles and their bidding interests.
+     * @param averageRatings The average ratings of the articles.
+     * @param reviewers The reviewers that are making the review.
+     */
+    void handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                      const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                      std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
+                      std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
+                      const std::vector<std::shared_ptr<User>> reviewers) override;
 
     /**
      * @brief Handles the selection of articles based on the provided parameters.

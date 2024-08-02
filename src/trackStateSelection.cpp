@@ -22,6 +22,15 @@ void TrackStateSelection::handleArticle(std::vector<std::shared_ptr<Article>>& a
     throw TrackStateException("Cannot handle articles in selection state");
 }
 
+void TrackStateSelection::handleReview(const std::vector<std::shared_ptr<Article>>& articles,
+                                       const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
+                                       std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
+                                       std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
+                                       const std::vector<std::shared_ptr<User>> reviewers)
+{
+    throw TrackStateException("Review is not allowed in selection state");
+}
+
 const std::string& TrackStateSelection::stateName()
 {
     return m_stateName;
@@ -32,5 +41,5 @@ void TrackStateSelection::handleSelection(std::vector<std::shared_ptr<Article>>&
                                           std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
                                           int selectionThreshold)
 {
-    selectedArticles = selectionStrategy->select(ratingMap, selectionThreshold);
+    selectionStrategy->select(selectedArticles, ratingMap, selectionThreshold);
 }

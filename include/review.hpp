@@ -63,7 +63,7 @@ class Review
      * @brief Getter for the rating of the review.
      * @return The rating of the review.
      */
-    Rating rating();
+    Rating rating() const;
 
     /**
      * @brief Setter for the rating of the review.

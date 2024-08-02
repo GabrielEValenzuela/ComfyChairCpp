@@ -14,7 +14,7 @@ std::string Review::reviewText()
     return m_text;
 }
 
-Rating Review::rating()
+Rating Review::rating() const
 {
     return m_rating;
 }

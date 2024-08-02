@@ -49,7 +49,7 @@ void TrackWorkshop::handleTrackReview()
 {
     try
     {
-        m_currentState->handleReview(m_articles, m_articleBidding, m_articleReviews, m_reviewers);
+        m_currentState->handleReview(m_articles, m_articleBidding, m_articleReviews, m_articleRating, m_reviewers);
     }
     catch (const TrackStateException& e)
     {
@@ -57,15 +57,21 @@ void TrackWorkshop::handleTrackReview()
     }
 }
 
-void TrackWorkshop::handleTrackSelection(
-    std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articleRatingMap, int number)
+void TrackWorkshop::handleTrackSelection(int threshold)
 {
     if (m_selectionStrategy == nullptr)
     {
         throw std::runtime_error("Selection strategy is null");
     }
 
-    // m_currentState->handleSelection(m_selectedArticles, m_selectionStrategy, articleRatingMap, number);
+    try
+    {
+        m_currentState->handleSelection(m_selectedArticles, m_selectionStrategy, m_articleRating, threshold);
+    }
+    catch (const TrackStateException& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 const std::string& TrackWorkshop::trackName() const
@@ -128,6 +134,9 @@ void TrackWorkshop::currentReviews() const
     for (const auto& article : m_articleReviews)
     {
         std::cout << "The article '" << article.first->articleName() << "' has the following reviews:" << std::endl;
-        article.second.printReview();
+        for (const auto& review : article.second)
+        {
+            review.printReview();
+        }
     }
 }

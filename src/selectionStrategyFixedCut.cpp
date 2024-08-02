@@ -6,12 +6,14 @@
  * MIT License
  */
 
-#include "SelectionStrategyFixedCut.hpp"
+#include "selectionStrategyFixedCut.hpp"
+#include <algorithm>
 
-std::vector<std::shared_ptr<Article>> SelectionStrategyFixedCut::select(
-    std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap, int selectionThreshold)
+void SelectionStrategyFixedCut::select(std::vector<std::shared_ptr<Article>>& selectedArticles,
+                                       std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                       int selectionThreshold)
 {
-    if (selectionThreshold <= 0 || selectionThreshold >= 100)
+    if (selectionThreshold <= 0 || selectionThreshold > 100)
     {
         throw std::out_of_range("Number must be between 1 and 100");
     }
@@ -35,9 +37,8 @@ std::vector<std::shared_ptr<Article>> SelectionStrategyFixedCut::select(
 
     // Sort the articles based on rating using the custom comparator
     std::sort(articles.begin(), articles.end(), ratingComparator);
+    std::cerr << "Sorted articles" << articles.size() << std::endl;
 
-    // Take the required number of articles
-    std::vector<std::shared_ptr<Article>> selectedArticles(articles.begin(), articles.begin() + numberArticlesToTake);
-
-    return selectedArticles;
+    selectedArticles.clear(); // Clear any existing articles
+    selectedArticles.insert(selectedArticles.end(), articles.begin(), articles.begin() + numberArticlesToTake);
 }

@@ -54,11 +54,9 @@ class Track
 
     /**
      * @brief Handles the selection of a track.
-     * @param articleRatingMap The unordered map of articles and their ratings.
-     * @param number The track number to be selected.
+     * @param threshold The track number to be selected.
      */
-    virtual void handleTrackSelection(
-        std::unordered_map<std::shared_ptr<Article>, std::shared_ptr<Rating>> articleRatingMap, int number) = 0;
+    virtual void handleTrackSelection(int threshold) = 0;
 
     /**
      * @brief Get the track's name.
