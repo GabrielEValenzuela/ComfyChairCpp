@@ -8,6 +8,8 @@
 
 #include "trackStateReception.hpp"
 #include "bid.hpp"
+#include <algorithm>
+#include <iostream>
 
 void ReceptionStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& articles,
                                         const std::shared_ptr<Article>& article, OperationType operation)
@@ -35,43 +37,39 @@ void ReceptionStateTrack::updateArticle(std::vector<std::shared_ptr<Article>>& a
                                         const std::shared_ptr<Article>& article)
 {
     const auto& targetTitle = article->articleName();
-    auto it = std::find_if(articles.begin(), articles.end(), [&targetTitle](const std::shared_ptr<Article>& article) {
-        return article->articleName() == targetTitle;
+    auto it = std::find_if(articles.begin(), articles.end(), [&targetTitle](const std::shared_ptr<Article>& a) {
+        return a->articleName() == targetTitle;
     });
     if (it != articles.end())
     {
         (*it)->updateFields(article);
     }
-    // LCOV_EXCL_START //ToDo Remove when article is fully implemented
     else
     {
         std::cout << "Article not found" << std::endl;
     }
-    // LCOV_EXCL_STOP
 }
 
 void ReceptionStateTrack::removeArticle(std::vector<std::shared_ptr<Article>>& articles,
                                         const std::shared_ptr<Article>& article)
 {
     const auto& targetTitle = article->articleName();
-    auto it = std::find_if(articles.begin(), articles.end(), [&targetTitle](const std::shared_ptr<Article>& article) {
-        return article->articleName() == targetTitle;
+    auto it = std::find_if(articles.begin(), articles.end(), [&targetTitle](const std::shared_ptr<Article>& a) {
+        return a->articleName() == targetTitle;
     });
     if (it != articles.end())
     {
         articles.erase(it);
     }
-    // LCOV_EXCL_START //ToDo Remove when article is fully implemented
     else
     {
         std::cout << "Article not found" << std::endl;
     }
-    // LCOV_EXCL_STOP
 }
 
 void ReceptionStateTrack::handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
                                         std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
-                                        const std::vector<std::shared_ptr<User>> reviewers)
+                                        const std::vector<std::shared_ptr<User>>& reviewers)
 {
     throw TrackStateException("Bidding is not allowed in reception state");
 }
@@ -88,7 +86,7 @@ void ReceptionStateTrack::handleReview(const std::vector<std::shared_ptr<Article
                                        const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
                                        std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
                                        std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
-                                       const std::vector<std::shared_ptr<User>> reviewers)
+                                       const std::vector<std::shared_ptr<User>>& reviewers)
 {
     throw TrackStateException("Review is not allowed in reception state");
 }

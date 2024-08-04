@@ -12,24 +12,32 @@
 #include "articleInterface.hpp"
 #include "review.hpp"
 #include "selectionStrategy.hpp"
+#include <unordered_map>
 #include <vector>
 
 /**
- * @brief The SelectionStrategyFixedCut class represents a fixed cut selection strategy for selecting reviewers.
+ * @class SelectionStrategyFixedCut
+ * @brief Implements a fixed cut selection strategy for selecting the top-rated articles.
  *
- * This strategy selects a fixed number of reviewers from the given list of reviewers and articles.
+ * The SelectionStrategyFixedCut class extends the SelectionStrategy class to provide an implementation
+ * that selects a fixed number of top-rated articles based on their ratings. It uses the ratings to determine
+ * which articles to select, up to a specified threshold.
  */
 class SelectionStrategyFixedCut : public SelectionStrategy
 {
   public:
     /**
-     * @brief Selects a number of articles based on a given article-rating map.
-     * @param selectedArticles The vector of selected articles.
-     * @param ratingMap The map containing articles and their corresponding ratings.
+     * @brief Select the top-rated articles based on their ratings.
+     * @param selectedArticles The vector to store the selected articles.
+     * @param ratingMap A map containing articles and their corresponding ratings.
      * @param selectionThreshold The number of articles to select.
+     *
+     * This method populates the selectedArticles vector with the top-rated articles
+     * from the ratingMap, up to the number specified by selectionThreshold. It overrides
+     * the pure virtual method defined in the SelectionStrategy base class.
      */
     void select(std::vector<std::shared_ptr<Article>>& selectedArticles,
-                std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap, int selectionThreshold) override;
+                const std::unordered_map<std::shared_ptr<Article>, Rating>& ratingMap, int selectionThreshold) override;
 };
 
 #endif // SELECTION_STRATEGY_FIXED_CUT_HPP

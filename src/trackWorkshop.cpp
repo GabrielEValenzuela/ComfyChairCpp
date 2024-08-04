@@ -9,6 +9,7 @@
 #include "trackWorkshop.hpp"
 #include "bid.hpp"
 #include "trackStateReception.hpp"
+#include <iostream>
 
 TrackWorkshop::TrackWorkshop(const nlohmann::json& trackData)
 {
@@ -16,11 +17,17 @@ TrackWorkshop::TrackWorkshop(const nlohmann::json& trackData)
     m_currentState = std::make_shared<ReceptionStateTrack>();
 }
 
+TrackWorkshop::TrackWorkshop(const std::string& trackName, const std::shared_ptr<ITrackState>& state,
+                             const std::vector<std::shared_ptr<User>>& users)
+    : m_trackName(trackName), m_currentState(state), m_reviewers(users)
+{
+}
+
 void TrackWorkshop::handleTrackArticle(const std::shared_ptr<Article>& article, OperationType operation)
 {
     if (!article->isValid())
     {
-        std::cerr << "Article is not valid for this track" << std::endl;
+        std::cout << "Article is not valid for this track" << std::endl;
         return;
     }
     try
@@ -59,7 +66,7 @@ void TrackWorkshop::handleTrackReview()
 
 void TrackWorkshop::handleTrackSelection(int threshold)
 {
-    if (m_selectionStrategy == nullptr)
+    if (!m_selectionStrategy)
     {
         throw std::runtime_error("Selection strategy is null");
     }
@@ -110,7 +117,7 @@ size_t TrackWorkshop::amountBids() const
     return m_articleBidding.size();
 }
 
-void TrackWorkshop::addReviewer(const std::shared_ptr<User> reviewer)
+void TrackWorkshop::addReviewer(const std::shared_ptr<User>& reviewer)
 {
     m_reviewers.push_back(reviewer);
 }

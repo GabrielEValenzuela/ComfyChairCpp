@@ -8,13 +8,16 @@
 
 #include "selectionStrategyBest.hpp"
 
+constexpr auto MINIMUN_THRESHOLD = -3;
+constexpr auto MAXIMUM_THRESHOLD = 3;
+
 void SelectionStrategyBest::select(std::vector<std::shared_ptr<Article>>& selectedArticles,
-                                   std::unordered_map<std::shared_ptr<Article>, Rating> ratingMap,
+                                   const std::unordered_map<std::shared_ptr<Article>, Rating>& ratingMap,
                                    int selectionThreshold)
 {
-    if (selectionThreshold < -3 || selectionThreshold > 3)
+    if (selectionThreshold < MINIMUN_THRESHOLD || selectionThreshold > MAXIMUM_THRESHOLD)
     {
-        throw std::runtime_error("Number is not within the valid range of -3 to +3.");
+        throw std::runtime_error("Selection threshold is not within the valid range of -3 to +3.");
     }
 
     selectedArticles.clear(); // Clear any existing articles

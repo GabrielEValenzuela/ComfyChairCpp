@@ -1,5 +1,14 @@
+/*
+ * ComfyChair
+ * Copyright (C) 2024, M. Venturino, G. Valenzuela
+ * July 21, 2024.
+ *
+ * MIT License
+ */
+
 #include "trackStateBidding.hpp"
 #include "bid.hpp"
+#include <iostream>
 
 void BiddingStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& articles,
                                       const std::shared_ptr<Article>& article, OperationType operation)
@@ -17,7 +26,7 @@ void BiddingStateTrack::handleSelection(std::vector<std::shared_ptr<Article>>& s
 
 void BiddingStateTrack::handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
                                       std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
-                                      const std::vector<std::shared_ptr<User>> reviewers)
+                                      const std::vector<std::shared_ptr<User>>& reviewers)
 {
     for (const auto& reviewer : reviewers)
     {
@@ -33,7 +42,7 @@ void BiddingStateTrack::handleReview(const std::vector<std::shared_ptr<Article>>
                                      const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
                                      std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
                                      std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
-                                     const std::vector<std::shared_ptr<User>> reviewers)
+                                     const std::vector<std::shared_ptr<User>>& reviewers)
 {
     throw TrackStateException("Review is not allowed in bidding state");
 }

@@ -12,135 +12,183 @@
 #include "bid.hpp"
 #include "track.hpp"
 #include "user.hpp"
+#include <unordered_map>
+#include <vector>
 
 /**
- * @brief Track class that represents a track in the conference.
+ * @class TrackWorkshop
+ * @brief Represents a workshop track in the conference.
+ *
+ * The TrackWorkshop class extends the Track class to provide specific functionalities
+ * for managing a workshop track within the conference. It handles operations such as
+ * adding articles, managing bids and reviews, and selecting articles based on a strategy.
  */
 class TrackWorkshop : public Track
 {
   public:
     /**
-     * @brief Track constructor.
+     * @brief Default constructor.
+     *
+     * Initializes a TrackWorkshop object with default values.
      */
     TrackWorkshop() = default;
 
     /**
-     * @brief Track constructor.
-     * @param trackData The track data.
+     * @brief Parameterized constructor to initialize a workshop track with JSON data.
+     * @param trackData A JSON object containing the track data.
+     *
+     * Constructs a TrackWorkshop object by parsing the provided JSON data, extracting
+     * relevant fields such as track name and articles.
      */
     explicit TrackWorkshop(const nlohmann::json& trackData);
 
     /**
-     * @brief Track constructor.
-     * @param trackName The track's name.
-     * @param state The track's state.
-     * @param users The users in the track.
+     * @brief Parameterized constructor to initialize a workshop track with specific values.
+     * @param trackName The name of the track.
+     * @param state The initial state of the track.
+     * @param users A vector of shared pointers to users involved in the track.
+     *
+     * Constructs a TrackWorkshop object with the specified track name, state, and users.
      */
     explicit TrackWorkshop(const std::string& trackName, const std::shared_ptr<ITrackState>& state,
                            const std::vector<std::shared_ptr<User>>& users);
 
     /**
-     * @brief Destructor.
+     * @brief Default destructor.
+     *
+     * Cleans up any resources used by the TrackWorkshop object.
      */
     ~TrackWorkshop() = default;
 
     /**
-     * @brief Adds an article to the track.
-     * @param article The article to add.
-     * @param operation Operation to perform.
+     * @brief Handle an article within the track.
+     * @param article The article to handle.
+     * @param operation The operation to perform (Create, Update, Delete).
+     *
+     * Manages the specified article within the track based on the operation type.
      */
     void handleTrackArticle(const std::shared_ptr<Article>& article, OperationType operation) override;
 
     /**
-     * @brief Adds a bid to an article.
+     * @brief Handle the bidding process for articles within the track.
+     *
+     * Manages the bidding process for articles in the track, associating articles with bids made by reviewers.
      */
     void handleTrackBidding() override;
 
     /**
-     * @brief Adds a review to an article.
+     * @brief Handle the review process for articles within the track.
+     *
+     * Manages the review process for articles in the track, ensuring that articles are reviewed and rated by reviewers.
      */
     void handleTrackReview() override;
 
     /**
-     * @brief Handles the selection of a track.
-     * @param threshold The track number to be selected.
+     * @brief Handle the selection of articles within the track.
+     * @param threshold The number of articles to select.
+     *
+     * Manages the selection of articles based on the provided threshold and selection strategy.
      */
     void handleTrackSelection(int threshold) override;
 
     /**
-     * @brief Get the track's name.
-     * @return The track's name.
+     * @brief Get the name of the track.
+     * @return A constant reference to a string representing the track's name.
+     *
+     * Returns the name of the track.
      */
     const std::string& trackName() const override;
 
     /**
-     * @brief Set the track's state.
-     * @param state The track's state.
+     * @brief Set the state of the track.
+     * @param state A shared pointer to the new state of the track.
+     *
+     * Establishes the current state of the track.
      */
     void establishState(const std::shared_ptr<ITrackState>& state) override;
 
     /**
-     * @brief Prints the current state of the track.
+     * @brief Print the current state of the track.
+     *
+     * Outputs the current state of the track to the standard output.
      */
     void currentState() const override;
 
     /**
-     * @brief Get the amount of articles on the track
-     * @return Number of articles
+     * @brief Get the number of articles in the track.
+     * @return The number of articles in the track.
+     *
+     * Returns the number of articles in the track.
      */
     int amountArticles() const override;
 
     /**
-     * @brief Get the selected articles in the track.
-     * @return A vector of shared pointers to the selected articles.
-     */
-    std::vector<std::shared_ptr<Article>> selectedArticles() override;
-
-    /**
-     * @brief Sets the selection strategy for the track poster.
+     * @brief Set the selection strategy for the track.
      * @param strategy A shared pointer to the selection strategy to be set.
+     *
+     * Establishes the selection strategy to be used for selecting articles in the track.
      */
     void selectionStrategy(const std::shared_ptr<SelectionStrategy>& strategy) override;
 
     /**
-     * @brief Get the amount of bids on the track
-     * @return Number of bids
+     * @brief Get the selected articles in the track.
+     * @return A vector of shared pointers to the selected articles.
+     *
+     * Returns the selected articles in the track.
+     */
+    std::vector<std::shared_ptr<Article>> selectedArticles() override;
+
+    /**
+     * @brief Get the number of bids in the track.
+     * @return The number of bids in the track.
+     *
+     * Returns the number of bids in the track.
      */
     size_t amountBids() const override;
 
     /**
-     * @brief Prints the current bids of the track.
+     * @brief Print the current bids in the track.
+     *
+     * Outputs the current bids in the track to the standard output.
      */
     void currentBids() const override;
 
     /**
-     * @brief Get the amount of reviews on the track
-     * @return Number of reviews
+     * @brief Get the number of reviews in the track.
+     * @return The number of reviews in the track.
+     *
+     * Returns the number of reviews in the track.
      */
     size_t amountReviews() const override;
 
     /**
-     * @brief Prints the current reviews of the track.
+     * @brief Print the current reviews in the track.
+     *
+     * Outputs the current reviews in the track to the standard output.
      */
     void currentReviews() const override;
 
     /**
      * @brief Add a reviewer to the track.
+     * @param reviewer A shared pointer to the reviewer to be added.
+     *
+     * Adds the specified reviewer to the track.
      */
-    void addReviewer(const std::shared_ptr<User> reviewer) override;
+    void addReviewer(const std::shared_ptr<User>& reviewer) override;
 
   private:
-    std::string m_trackName;                                  ///< The track's name.
-    std::vector<std::shared_ptr<Article>> m_articles;         ///< The articles in the track.
-    std::vector<std::shared_ptr<User>> m_reviewers;           ///< The users in the track.
-    std::vector<std::shared_ptr<Article>> m_selectedArticles; ///< The selected articles in the track.
-    std::shared_ptr<ITrackState> m_currentState;              ///< The track's state.
-    std::shared_ptr<SelectionStrategy> m_selectionStrategy;   ///< The selection strategy.
+    std::string m_trackName;                                  /**< The name of the track. */
+    std::vector<std::shared_ptr<Article>> m_articles;         /**< The articles in the track. */
+    std::vector<std::shared_ptr<User>> m_reviewers;           /**< The reviewers in the track. */
+    std::vector<std::shared_ptr<Article>> m_selectedArticles; /**< The selected articles in the track. */
+    std::shared_ptr<ITrackState> m_currentState;              /**< The current state of the track. */
+    std::shared_ptr<SelectionStrategy> m_selectionStrategy;   /**< The selection strategy used in the track. */
     std::unordered_map<std::shared_ptr<Article>, Bid>
-        m_articleBidding; ///< Relation between article and bidding interest.
+        m_articleBidding; /**< A map associating articles with their bidding interest. */
     std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>
-        m_articleReviews;                                                 ///< Relation between article and review.
-    std::unordered_map<std::shared_ptr<Article>, Rating> m_articleRating; ///< Relation between article and rating.
+        m_articleReviews; /**< A map associating articles with their reviews. */
+    std::unordered_map<std::shared_ptr<Article>, Rating>
+        m_articleRating; /**< A map associating articles with their ratings. */
 };
 
 #endif // TRACK_WORKSHOP_HPP

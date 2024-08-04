@@ -7,6 +7,7 @@
  */
 
 #include "articleInterface.hpp"
+#include <iostream>
 
 Article::Article(const nlohmann::json& articleJson)
 {
@@ -26,13 +27,14 @@ void Article::display() const
 {
     std::cout << "Title: " << m_title << std::endl;
     std::cout << "Authors: ";
-    auto last = --m_authors.end();
-    for (auto it = m_authors.begin(); it != last; ++it)
+    for (auto it = m_authors.begin(); it != m_authors.end(); ++it)
     {
-        std::cout << *it << ", ";
+        std::cout << *it;
+        if (it != std::prev(m_authors.end()))
+        {
+            std::cout << ", ";
+        }
     }
-    std::cout << *last; // Print the last author without a trailing comma
-
     std::cout << std::endl;
     std::cout << "Attached URL: " << m_attachedUrl << std::endl;
 }

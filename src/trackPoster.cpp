@@ -8,8 +8,9 @@
 
 #include "trackPoster.hpp"
 #include "articlePoster.hpp"
+#include "bid.hpp"
 #include "trackStateReception.hpp"
-#include <bid.hpp>
+#include <iostream>
 
 TrackPoster::TrackPoster(const nlohmann::json& trackData)
 {
@@ -21,7 +22,7 @@ void TrackPoster::handleTrackArticle(const std::shared_ptr<Article>& article, Op
 {
     if (!article->isValid() || dynamic_cast<ArticlePoster*>(article.get()) == nullptr)
     {
-        std::cerr << "Article is not valid for this track" << std::endl;
+        std::cout << "Article is not valid for this track" << std::endl;
         return;
     }
     try
@@ -111,7 +112,7 @@ size_t TrackPoster::amountBids() const
     return m_articleBidding.size();
 }
 
-void TrackPoster::addReviewer(const std::shared_ptr<User> reviewer)
+void TrackPoster::addReviewer(const std::shared_ptr<User>& reviewer)
 {
     m_reviewers.push_back(reviewer);
 }

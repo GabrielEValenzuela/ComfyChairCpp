@@ -9,7 +9,11 @@
 #include "review.hpp"
 #include <iostream>
 
-std::string Review::reviewText()
+Review::Review(const std::string& text, Rating rating) : m_text(text), m_rating(rating)
+{
+}
+
+std::string Review::reviewText() const
 {
     return m_text;
 }

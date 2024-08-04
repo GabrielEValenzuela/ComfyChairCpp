@@ -7,51 +7,47 @@
  */
 
 #include "user.hpp"
-#include "review.hpp"
-
-#include <iostream>
 
 User::User(const nlohmann::json& userJson)
 {
-    m_fullNames = userJson.value("name", "");
-    m_affiliation = userJson.value("affiliation", "");
-    m_email = userJson.value("email", "");
-    m_password = userJson.value("password", "");
-    m_isChair = userJson.value("isChair", false);
-    m_isAuthor = userJson.value("isAuthor", false);
+    m_fullNames = userJson.at("name").get<std::string>();
+    m_affiliation = userJson.at("affiliation").get<std::string>();
+    m_email = userJson.at("email").get<std::string>();
+    m_password = userJson.at("password").get<std::string>();
+    m_isChair = userJson.at("isChair").get<bool>();
+    m_isAuthor = userJson.at("isAuthor").get<bool>();
 }
 
-const std::string& User::fullNames()
+User::~User()
+{
+}
+
+const std::string& User::fullNames() const
 {
     return m_fullNames;
 }
 
-const std::string& User::affiliation()
+const std::string& User::affiliation() const
 {
     return m_affiliation;
 }
 
-const std::string& User::email()
+const std::string& User::email() const
 {
     return m_email;
 }
 
-bool User::isChair()
+bool User::isChair() const
 {
     return m_isChair;
 }
 
-bool User::isAuthor()
+bool User::isAuthor() const
 {
     return m_isAuthor;
 }
 
-Bid User::determineInterest()
+bool User::isReviewer() const
 {
-    throw std::runtime_error("Regular user can't bid");
-}
-
-Review User::reviewArticle()
-{
-    throw std::runtime_error("Regular user can't review");
+    return false;
 }
