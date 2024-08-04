@@ -7,6 +7,7 @@
  */
 
 #include "articleRegular.hpp"
+#include <iostream>
 
 constexpr auto MINIMUM_ABSTRACT_SIZE = 10; // Minimum size for an abstract. Set to 10 for testing purposes.
 

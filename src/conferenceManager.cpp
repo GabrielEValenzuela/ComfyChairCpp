@@ -16,17 +16,16 @@ void ConferenceManager::startBidding(std::chrono::system_clock::time_point time)
 {
     for (auto& track : m_conference->tracks())
     {
-        track->establishState(std::make_unique<BiddingStateTrack>());
+        track->establishState(std::make_shared<BiddingStateTrack>());
         m_conference->biddingStart(time);
     }
 }
 
 void ConferenceManager::startRevision(std::chrono::system_clock::time_point time)
 {
-
     for (auto& track : m_conference->tracks())
     {
-        track->establishState(std::make_unique<ReviewStateTrack>());
+        track->establishState(std::make_shared<ReviewStateTrack>());
         m_conference->revisionStart(time);
     }
 }
@@ -35,7 +34,7 @@ void ConferenceManager::startSelection(std::chrono::system_clock::time_point tim
 {
     for (auto& track : m_conference->tracks())
     {
-        track->establishState(std::make_unique<TrackStateSelection>());
+        track->establishState(std::make_shared<SelectionStateTrack>());
         m_conference->selectionStart(time);
     }
 }

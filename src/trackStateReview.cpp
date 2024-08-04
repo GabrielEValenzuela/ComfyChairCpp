@@ -1,4 +1,18 @@
+/*
+ * ComfyChair
+ * Copyright (C) 2024, M. Venturino, G. Valenzuela
+ * July 20, 2024.
+ *
+ * MIT License
+ */
+
 #include "trackStateReview.hpp"
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <unordered_map>
+#include <vector>
 
 void ReviewStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& articles,
                                      const std::shared_ptr<Article>& article, OperationType operation)
@@ -8,7 +22,7 @@ void ReviewStateTrack::handleArticle(std::vector<std::shared_ptr<Article>>& arti
 
 void ReviewStateTrack::handleBidding(const std::vector<std::shared_ptr<Article>>& articles,
                                      std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
-                                     const std::vector<std::shared_ptr<User>> reviewers)
+                                     const std::vector<std::shared_ptr<User>>& reviewers)
 {
     throw TrackStateException("Bidding is not allowed in review state");
 }
@@ -25,7 +39,7 @@ void ReviewStateTrack::handleReview(const std::vector<std::shared_ptr<Article>>&
                                     const std::unordered_map<std::shared_ptr<Article>, Bid>& biddingMap,
                                     std::unordered_map<std::shared_ptr<Article>, std::vector<Review>>& reviewMap,
                                     std::unordered_map<std::shared_ptr<Article>, Rating>& averageRatings,
-                                    const std::vector<std::shared_ptr<User>> reviewers)
+                                    const std::vector<std::shared_ptr<User>>& reviewers)
 {
     size_t numArticlesPerReviewer = std::max(3ul, articles.size() / reviewers.size());
     size_t extraArticles = articles.size() % reviewers.size();

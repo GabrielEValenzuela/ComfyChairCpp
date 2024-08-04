@@ -14,42 +14,56 @@
 #include "trackRegular.hpp"
 #include "trackWorkshop.hpp"
 #include <memory>
+#include <nlohmann/json.hpp>
 
 /**
- * @brief TrackFactory class that creates tracks.
+ * @class TrackFactory
+ * @brief Factory class for creating tracks.
+ *
+ * The TrackFactory class provides a static method for creating Track objects
+ * based on the provided JSON data. It supports the creation of different types
+ * of tracks, such as regular, workshop, and poster tracks.
  */
 class TrackFactory
 {
   public:
     /**
-     * @brief Creates a track.
-     * @param trackData The track data.
-     * @return The track.
+     * @brief Creates a track based on the provided JSON data.
+     * @param trackData A JSON object containing the track data.
+     * @return A shared pointer to the created Track object.
+     *
+     * This method examines the "trackType" field in the JSON data to determine
+     * the type of track to create. It returns a shared pointer to the appropriate
+     * Track subclass based on the "trackType". If the track type is unknown or
+     * missing, it throws an invalid_argument exception.
      */
     static std::shared_ptr<Track> createTrack(const nlohmann::json& trackData)
     {
         try
         {
-            if (trackData.at("trackType") == "regular")
+            const std::string& trackType = trackData.at("trackType");
+            if (trackType == "regular")
             {
                 return std::make_shared<TrackRegular>(trackData);
             }
-            else if (trackData.at("trackType") == "workshop")
+            else if (trackType == "workshop")
             {
                 return std::make_shared<TrackWorkshop>(trackData);
             }
-            else if (trackData.at("trackType") == "poster")
+            else if (trackType == "poster")
             {
                 return std::make_shared<TrackPoster>(trackData);
             }
             else
             {
-                throw std::invalid_argument("Unknown track type. Did you check if the key 'trackType' is present?.");
+                throw std::invalid_argument("Unknown track type: " + trackType +
+                                            ". Did you check if the key 'trackType' is present?");
             }
         }
-        catch (const std::exception& e)
+        catch (const nlohmann::json::exception& e)
         {
-            throw std::invalid_argument("Unknown track type. Did you check if the key 'trackType' is present?.");
+            throw std::invalid_argument("Invalid track data: " + std::string(e.what()) +
+                                        ". Did you check if the key 'trackType' is present?");
         }
     }
 };

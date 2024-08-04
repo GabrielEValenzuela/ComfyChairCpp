@@ -7,6 +7,7 @@
  */
 
 #include "articlePoster.hpp"
+#include <iostream>
 
 ArticlePoster::ArticlePoster(const nlohmann::json& articleJson) : Article(articleJson)
 {

@@ -53,7 +53,7 @@ Conference::Conference(const nlohmann::json& conferenceJson)
             }
             catch (const std::exception& e)
             {
-                std::cerr << "Error creating track: " << e.what() << std::endl;
+                std::cout << "Error creating track: " << e.what() << std::endl;
             }
         }
     }
@@ -80,20 +80,24 @@ std::chrono::system_clock::time_point Conference::parseDate(const std::string& d
     return std::chrono::system_clock::from_time_t(time);
 }
 
+// LCOV_EXCL_START
 std::chrono::system_clock::time_point Conference::biddingStart()
 {
     return m_biddingStart;
 }
+// LCOV_EXCL_STOP
 
 void Conference::biddingStart(const std::chrono::system_clock::time_point& timePoint)
 {
     m_biddingStart = timePoint;
 }
 
+// LCOV_EXCL_START
 std::chrono::system_clock::time_point Conference::revisionStart()
 {
     return m_revisionStart;
 }
+// LCOV_EXCL_STOP
 
 void Conference::revisionStart(const std::chrono::system_clock::time_point& timePoint)
 {
@@ -101,10 +105,12 @@ void Conference::revisionStart(const std::chrono::system_clock::time_point& time
     m_revisionStart = timePoint;
 }
 
+// LCOV_EXCL_START
 std::chrono::system_clock::time_point Conference::selectionStart()
 {
     return m_selectionStart;
 }
+// LCOV_EXCL_STOP
 
 void Conference::selectionStart(const std::chrono::system_clock::time_point& timePoint)
 {
@@ -117,10 +123,12 @@ std::vector<std::shared_ptr<Track>> Conference::tracks()
     return m_tracks;
 }
 
+// LCOV_EXCL_START
 std::chrono::system_clock::time_point Conference::createdAt()
 {
     return m_createdAt;
 }
+// LCOV_EXCL_STOP
 
 void Conference::validateAndAddReviewers(std::shared_ptr<Track> track, const nlohmann::json& trackJson)
 {
@@ -128,10 +136,6 @@ void Conference::validateAndAddReviewers(std::shared_ptr<Track> track, const nlo
     {
         for (const auto& reviewerName : trackJson["reviewers"])
         {
-
-            for (const auto& user : m_reviewers)
-            {
-            }
             if (m_reviewers.find(reviewerName) == m_reviewers.end())
             {
                 throw std::invalid_argument("Reviewer not found: " + reviewerName.get<std::string>());

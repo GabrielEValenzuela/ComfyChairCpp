@@ -19,73 +19,96 @@
 
 /**
  * @class Reviewer
- * @brief Reviewer class that represents a reviewer in the conference.
+ * @brief Represents a reviewer in the conference.
+ *
+ * The Reviewer class extends the User class to provide specific functionalities
+ * related to reviewers, such as managing bids and reviews. It encapsulates the
+ * details and behaviors associated with a reviewer in the conference system.
  */
 class Reviewer : public User
 {
   public:
     /**
      * @brief Default constructor.
-     * @note Avoid its use.
+     *
+     * Initializes a Reviewer object with default values. Its use is generally
+     * discouraged unless specific default initialization is required.
      */
     Reviewer() = default;
 
     /**
-     * @brief Constructor.
-     * @param userJson Represents the reviewer's information, in a JSON format.
+     * @brief Parameterized constructor to initialize a reviewer with JSON data.
+     * @param userJson A JSON object containing the reviewer's information.
+     *
+     * Constructs a Reviewer object by parsing the provided JSON data, extracting
+     * relevant fields such as user details.
      */
-    Reviewer(const nlohmann::json& userJson) : User(userJson){};
+    explicit Reviewer(const nlohmann::json& userJson) : User(userJson)
+    {
+    }
 
     /**
-     * @brief Destructor.
+     * @brief Default destructor.
+     *
+     * Cleans up any resources used by the Reviewer object.
      */
-    virtual ~Reviewer() = default;
+    ~Reviewer() = default;
 
     /**
      * @brief Getter for the bids vector.
-     * @return A const reference to the bids vector.
+     * @return A constant reference to the vector of bids.
+     *
+     * Retrieves the list of bids placed by the reviewer.
      */
-    const std::vector<Bid>& bids();
+    const std::vector<Bid>& bids() const;
 
     /**
      * @brief Getter for the reviews vector.
-     * @return A const reference to the reviews vector.
-     */
-    const std::vector<std::shared_ptr<Review>>& reviews();
-
-    /**
-     * @brief Places a bid
-     */
-    Bid determineInterest() override;
-
-    /**
-     * @brief Reviews an article
-     */
-    Review reviewArticle() override;
-
-    /**
-     * @brief Performs a review operation on the given review.
+     * @return A constant reference to the vector of reviews.
      *
-     * This method is responsible for performing a review operation on the provided review object.
-     * The review operation can be specified using the `operation` parameter.
-     *
-     * @param review A shared pointer to the review object to be reviewed.
-     * @param operation The type of review operation to be performed.
+     * Retrieves the list of reviews submitted by the reviewer.
      */
-    void review(const std::shared_ptr<Review>& review, OperationType operation);
+    const std::vector<std::shared_ptr<Review>>& reviews() const;
 
     /**
-     * @brief Bool is reviewer
-     * @return True if the user is a reviewer.
+     * @brief Checks if the user is a reviewer.
+     * @return True if the user is a reviewer, false otherwise.
+     *
+     * Indicates that this user is a reviewer.
      */
-    bool isReviewer()
+    bool isReviewer() const
     {
         return true;
     }
 
+    /**
+     * @brief Performs a review operation on the given review.
+     * @param review A shared pointer to the review object to be operated on.
+     * @param operation The type of review operation to be performed (Create, Update, Delete).
+     *
+     * This method handles review operations such as creating, updating, or deleting a review.
+     */
+    void review(const std::shared_ptr<Review>& review, OperationType operation);
+
+    /**
+     * @brief Determines and places a bid on an article.
+     * @return A Bid object representing the reviewer's interest in an article.
+     *
+     * This method determines the reviewer's interest in an article and places a bid accordingly.
+     */
+    Bid determineInterest() override;
+
+    /**
+     * @brief Reviews an article.
+     * @return A Review object containing the reviewer's evaluation of an article.
+     *
+     * This method allows the reviewer to evaluate and review an article.
+     */
+    Review reviewArticle() override;
+
   private:
-    std::vector<Bid> m_bids;
-    std::vector<std::shared_ptr<Review>> m_reviews;
+    std::vector<Bid> m_bids;                        /**< Vector of bids placed by the reviewer. */
+    std::vector<std::shared_ptr<Review>> m_reviews; /**< Vector of reviews submitted by the reviewer. */
 };
 
 #endif // USER_REVIEWER_HPP

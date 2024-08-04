@@ -10,6 +10,7 @@
 #include "articleRegular.hpp"
 #include "bid.hpp"
 #include "trackStateReception.hpp"
+#include <iostream>
 
 TrackRegular::TrackRegular(const nlohmann::json& trackData)
 {
@@ -21,7 +22,7 @@ void TrackRegular::handleTrackArticle(const std::shared_ptr<Article>& article, O
 {
     if (!article->isValid() || (dynamic_cast<ArticleRegular*>(article.get()) == nullptr))
     {
-        std::cerr << "Article is not valid for this track" << std::endl;
+        std::cout << "Article is not valid for this track" << std::endl;
         return;
     }
 
@@ -112,7 +113,7 @@ size_t TrackRegular::amountBids() const
     return m_articleBidding.size();
 }
 
-void TrackRegular::addReviewer(const std::shared_ptr<User> reviewer)
+void TrackRegular::addReviewer(const std::shared_ptr<User>& reviewer)
 {
     m_reviewers.push_back(reviewer);
 }

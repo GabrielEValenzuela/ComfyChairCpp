@@ -11,10 +11,13 @@
 #include "articleRegular.hpp"
 #include "bid.hpp"
 #include "itrackState.hpp"
+#include "selectionStrategyFixedCut.hpp"
 #include "track.hpp"
 #include "trackFactory.hpp"
 #include "trackStateBidding.hpp"
 #include "trackStateReception.hpp"
+#include "trackStateReview.hpp"
+#include "trackStateSelection.hpp"
 
 void TrackTest::SetUp()
 {
@@ -123,7 +126,7 @@ TEST_F(TrackTest, RegularTrack)
     // EXPECT_EQ(trackRegular->amountArticles(), 1); //Todo Uncomment this line when the minimum abstract size is 300
     EXPECT_EQ(trackRegular->amountArticles(), 2);
 
-    // No bidding ni review allowed
+    // No bidding, review  or selection allowed
     testing::internal::CaptureStdout();
     trackRegular->handleTrackBidding();
     outputCurrentState = testing::internal::GetCapturedStdout();
@@ -433,12 +436,12 @@ TEST_F(TrackTest, TrackBidding)
     // Handle the article
     trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
 
-    auto biddingState = std::make_shared<BiddingStateTrack>();
+    auto selectionState = std::make_shared<BiddingStateTrack>();
 
-    EXPECT_TRUE(biddingState != nullptr);
+    EXPECT_TRUE(selectionState != nullptr);
 
     // Change state
-    trackRegular->establishState(biddingState);
+    trackRegular->establishState(selectionState);
 
     // Verify the track information
     testing::internal::CaptureStdout();
@@ -452,12 +455,159 @@ TEST_F(TrackTest, TrackBidding)
     outputCurrentState = testing::internal::GetCapturedStdout();
     EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in Bidding state\n");
 
-    // Create a bidding
-    trackRegular->handleTrackBidding();
+    testing::internal::CaptureStdout();
+    auto strategyCut = std::make_shared<SelectionStrategyFixedCut>();
+    trackRegular->selectionStrategy(strategyCut);
+    trackRegular->handleTrackSelection(100); // Take all
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle selection in Bidding state\n");
 
-    // Update the bidding
-    trackRegular->handleTrackBidding();
+    testing::internal::CaptureStdout();
+    trackRegular->handleTrackReview();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Review is not allowed in bidding state\n");
+}
 
-    // Delete the bidding
+TEST_F(TrackTest, TrackSelection)
+{
+    // Crate the JSON input
+    const auto& jsonTrackRegular = R"(
+    {
+        "trackType": "regular",
+        "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
+
+    // Create the track
+    auto trackRegular = TrackFactory::createTrack(jsonTrackRegular);
+
+    // Validate topic name
+    EXPECT_STREQ(trackRegular->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Reception' state\n");
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    EXPECT_TRUE(articleRegular->isValid());
+
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+
+    auto selectionState = std::make_shared<SelectionStateTrack>();
+
+    EXPECT_TRUE(selectionState != nullptr);
+
+    // Change state
+    trackRegular->establishState(selectionState);
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Selection' state\n");
+
+    // No more handle articles
+    testing::internal::CaptureStdout();
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in selection state\n");
+
+    testing::internal::CaptureStdout();
     trackRegular->handleTrackBidding();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in selection state\n");
+
+    testing::internal::CaptureStdout();
+    trackRegular->handleTrackReview();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Review is not allowed in selection state\n");
+}
+
+TEST_F(TrackTest, TrackReview)
+{
+    // Crate the JSON input
+    const auto& jsonTrackRegular = R"(
+    {
+        "trackType": "regular",
+        "trackTopic": "Track SW Engineering"
+    }
+    )"_json;
+
+    // Create the track
+    auto trackRegular = TrackFactory::createTrack(jsonTrackRegular);
+
+    // Validate topic name
+    EXPECT_STREQ(trackRegular->trackName().c_str(), "Track SW Engineering");
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    auto outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Reception' state\n");
+
+    // Define the JSON to build the regular article
+    const auto& jsonArticleRegularValid = R"(
+    {
+            "articleType": "regular",
+            "articleTitle": "Visualizing Big Data",
+            "attachedFileUrl": "https://bit.ly/example",
+            "abstract": "An amazing paper of: C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++",
+            "authors": ["Jane Smith", "Bruce Wayne"]
+    }
+    )"_json;
+
+    // Create smartpointer to the regular article and check it's valid
+    auto articleRegular = std::make_shared<ArticleRegular>(jsonArticleRegularValid);
+
+    EXPECT_TRUE(articleRegular->isValid());
+
+    // Handle the article
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+
+    auto reviewState = std::make_shared<ReviewStateTrack>();
+
+    EXPECT_TRUE(reviewState != nullptr);
+
+    // Change state
+    trackRegular->establishState(reviewState);
+
+    // Verify the track information
+    testing::internal::CaptureStdout();
+    trackRegular->currentState();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Track 'Track SW Engineering' currently is in 'Review' state\n");
+
+    // No more handle articles
+    testing::internal::CaptureStdout();
+    trackRegular->handleTrackArticle(articleRegular, OperationType::Create);
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle articles in review state\n");
+
+    testing::internal::CaptureStdout();
+    trackRegular->handleTrackBidding();
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Bidding is not allowed in review state\n");
+
+    testing::internal::CaptureStdout();
+    auto strategyCut = std::make_shared<SelectionStrategyFixedCut>();
+    trackRegular->selectionStrategy(strategyCut);
+    trackRegular->handleTrackSelection(100); // Take all
+    outputCurrentState = testing::internal::GetCapturedStdout();
+    EXPECT_STREQ(outputCurrentState.c_str(), "Cannot handle selection in review state\n");
 }

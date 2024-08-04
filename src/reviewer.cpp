@@ -7,11 +7,14 @@
  */
 
 #include "reviewer.hpp"
+#include <algorithm>
+#include <ctime>
+#include <random>
 
 Bid Reviewer::determineInterest()
 {
-    static std::mt19937 gen(time(nullptr));           // Random number generator
-    static std::uniform_int_distribution<> dis(0, 3); // Distribution
+    static std::mt19937 gen(static_cast<unsigned int>(time(nullptr))); // Random number generator
+    static std::uniform_int_distribution<> dis(0, 3);                  // Distribution
 
     int decision = dis(gen);
     Bid bid;
@@ -29,12 +32,12 @@ Bid Reviewer::determineInterest()
 
 Review Reviewer::reviewArticle()
 {
-    static std::mt19937 gen(time(nullptr));           // Random number generator
-    static std::uniform_int_distribution<> dis(0, 5); // Distribution
-    auto message = "I, " + m_fullNames + ", have reviewed this article and considered that is:";
+    static std::mt19937 gen(static_cast<unsigned int>(time(nullptr))); // Random number generator
+    static std::uniform_int_distribution<> dis(0, 6);                  // Distribution
+    auto message = "I, " + m_fullNames + ", have reviewed this article and consider that it is:";
 
     int decision = dis(gen);
-    auto review = std::make_shared<Review>(message, static_cast<Rating>(decision));
+    auto review = std::make_shared<Review>(message, static_cast<Rating>(decision - 3));
     m_reviews.push_back(review);
     return *review;
 }
@@ -47,17 +50,16 @@ void Reviewer::review(const std::shared_ptr<Review>& review, OperationType opera
     }
     else if (operation == OperationType::Delete)
     {
-        // Remove the review from the list
         m_reviews.erase(std::remove(m_reviews.begin(), m_reviews.end(), review), m_reviews.end());
     }
 }
 
-const std::vector<Bid>& Reviewer::bids()
+const std::vector<Bid>& Reviewer::bids() const
 {
     return m_bids;
 }
 
-const std::vector<std::shared_ptr<Review>>& Reviewer::reviews()
+const std::vector<std::shared_ptr<Review>>& Reviewer::reviews() const
 {
     return m_reviews;
 }
