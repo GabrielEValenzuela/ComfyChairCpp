@@ -24,7 +24,10 @@ TEST_F(UserTest, UserCreation)
             "name": "Martin Venturino",
             "affiliation": "Tecnicas y herramientas",
             "email": "marven@tyh.com",
-            "password": "https://bit.ly/example2"
+            "password": "https://bit.ly/example2",
+            "isChair": false,
+            "isAuthor": false,
+            "isReviewer": false
     }
     )"_json;
 

@@ -17,7 +17,10 @@ void ReviewerTest::SetUp()
             "name": "Martin Venturino",
             "affiliation": "Tecnicas y herramientas",
             "email": "marven@tyh.com",
-            "password": "https://bit.ly/example2"
+            "password": "https://bit.ly/example2",
+            "isChair": false,
+            "isAuthor": false,
+            "isReviewer": true
     }
     )"_json;
 
@@ -44,7 +47,7 @@ TEST_F(ReviewerTest, ReviewerAddBid)
     testing::internal::CaptureStdout();
     reviewer->bids().front().bidSummary();
     auto outputCurrentState = testing::internal::GetCapturedStdout();
-    std::cerr << outputCurrentState << std::endl;
+    std::cout << outputCurrentState << std::endl;
     EXPECT_THAT(outputCurrentState.c_str(), testing::HasSubstr("Reviewer: Martin Venturino\nInterest: "));
 }
 
