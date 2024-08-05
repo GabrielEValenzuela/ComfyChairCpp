@@ -1,4 +1,4 @@
-# ComfyChair Conference Management System
+# ComfyChair Conference Management System [![Workflow for Quality Assurance](https://github.com/GabrielEValenzuela/ComfyChairCpp/actions/workflows/QAWorkflow.yml/badge.svg)](https://github.com/GabrielEValenzuela/ComfyChairCpp/actions/workflows/QAWorkflow.yml)
 
 Welcome to the official repository of ComfyChair, a comprehensive system designed to streamline the management of scientific conferences. This system facilitates the submission, review, and organization of conference papers and sessions.
 
