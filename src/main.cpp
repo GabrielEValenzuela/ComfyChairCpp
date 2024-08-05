@@ -6,11 +6,7 @@
  * MIT License
  */
 
-#include "exampleClass.hpp"
-
-int main()
+int main(const int argc, const char* argv[])
 {
-    auto example = ExampleClass();
-    example.printHelloWorld();
     return 0;
 }

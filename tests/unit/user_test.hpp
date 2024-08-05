@@ -6,22 +6,21 @@
  * MIT License
  */
 
-#ifndef _EXAMPLE_CLASS_TEST_HPP
-#define _EXAMPLE_CLASS_TEST_HPP
+#ifndef USER_TEST_HPP
+#define USER_TEST_HPP
 
-#include "exampleClass.hpp"
 #include "gtest/gtest.h"
 
 /**
- * @brief Runs unit tests for ExampleClass.
+ * @brief Runs unit tests for User.
  *
  */
-class ExampleClassTest : public ::testing::Test
+class UserTest : public ::testing::Test
 {
-protected:
+  protected:
     // LCOV_EXCL_START
-    ExampleClassTest() = default;
-    ~ExampleClassTest() = default;
+    UserTest() = default;
+    ~UserTest() = default;
 
     /**
      * @brief Set the environment for testing.
@@ -37,4 +36,4 @@ protected:
     // LCOV_EXCL_STOP
 };
 
-#endif // _EXAMPLE_CLASS_TEST_HPP
+#endif // USER_TEST_HPP
