@@ -88,6 +88,8 @@ runs:
         # Obtain the coverage data
           coverageData=($(lcov --list build/coverage.info | tail -n1 | grep -oE '[0-9.]+%'))
 
+        echo "Coverage data: ${coverageData[@]}"
+
         # Check if lines the coverage is greater than 90%
         linesCoverage=$(echo "${coverageData[0]}" | sed 's/%//')
         echo "Lines coverage is: $linesCoverage %"
@@ -101,7 +103,7 @@ runs:
           echo "PASSED: Lines coverage is greater than 90%"
           echo "------------------------------------------"
         fi
-        
+
         # Check if functions coverage is greater than 90%
         functionsCoverage=$(echo "${coverageData[1]}" | sed 's/%//')
         echo "Functions coverage is: $functionsCoverage %"
