@@ -86,7 +86,7 @@ runs:
         cd "${{ inputs.path }}"
 
         # Obtain the coverage data
-          coverageData=($(lcov --list build/coverage.info | tail -n1 | grep -oE '[0-9.]+%'))
+          coverageData=($(lcov --list build/coverage.info))
 
         echo "Coverage data: ${coverageData[@]}"
 
