@@ -13,51 +13,53 @@ runs:
     - name: Run tests
       shell: bash
       run: |
-          cd ${{ inputs.path }}/build
+        # Run tests
+        cd ${{ inputs.path }}/build
 
-          ctest --output-on-failure
+        ctest --output-on-failure
 
     - name: Run valgrind
       shell: bash
       run: |
-          cd ${{ inputs.path }}/build
+        # Run tests and check for memory leaks
+        cd ${{ inputs.path }}/build
 
-          # Run tests and check for memory leaks
-          valgrind --leak-check=full ctest --output-on-failure
+        valgrind --leak-check=full ctest --output-on-failure
 
     - name: Generate coverage files
       shell: bash
       run: |
-          cd ${{ inputs.path }}
+        # Generate coverage files
+        cd ${{ inputs.path }}
 
-          # Set arguments
-          arguments="--capture "
+        # Set arguments
+        arguments="--capture "
 
-          # Set working directory
-          if [[ -d "build/tests/unit" ]]; then
-            arguments+="--directory build/tests/unit "
-          fi
+        # Set working directory
+        if [[ -d "build/tests/unit" ]]; then
+          arguments+="--directory build/tests/unit "
+        fi
 
-          if [[ -d "build/tests/component" ]]; then
-            arguments+="--directory build/tests/component "
-          fi
+        if [[ -d "build/tests/component" ]]; then
+          arguments+="--directory build/tests/component "
+        fi
 
-          # Set output file
-          arguments+="--output-file build/coverage.info "
+        # Set output file
+        arguments+="--output-file build/coverage.info "
 
-          # # Disable branch coverage
-          arguments+="-rc lcov_branch_coverage=0 "
+        # # Disable branch coverage
+        arguments+="-rc lcov_branch_coverage=0 "
 
-          # Include test files
-          include_files=""
-          for file in $(find src/ include/ -type f -regextype posix-extended -regex ".*/*\.(cpp|h|c)" ! -name "main.cpp")
-          do
-            include_files+="--include=$(pwd)$dir/$file "
-          done
-          arguments+="$include_files"
+        # Include test files
+        include_files=""
+        for file in $(find src/ include/ -type f -regextype posix-extended -regex ".*/*\.(cpp|h|c)" ! -name "main.cpp")
+        do
+          include_files+="--include=$(pwd)$dir/$file "
+        done
+        arguments+="$include_files"
 
-          echo "Executing: lcov $arguments"
-          lcov $arguments
+        echo "Executing: lcov $arguments"
+        lcov $arguments
 
     - name: Generate coverage report
       shell: bash
@@ -81,14 +83,10 @@ runs:
     - name: Validate coverage
       shell: bash
       run: |
+        cd "${{ inputs.path }}"
 
-        cd ${{ inputs.path }}
-
-        # Obtain the coverage data
-        coverageData=($(lcov --list build/coverage.info | tail -n1 | grep -oE '[0-9.]+%'))
-
-        # Check if lines the coverage is greater than 20%
-        linesCoverage=$(echo "${coverageData[0]}" | sed 's/%//')
+        # Extract lines coverage (assuming the line starts with "lines")
+        linesCoverage=$(lcov --list build/coverage.info | grep -i '^lines' | grep -oE '[0-9.]+%' | head -n1 | sed 's/%//')
         echo "Lines coverage is: $linesCoverage %"
         if ! (( $(echo "$linesCoverage >= 90" | bc -l) )); then
           echo "----------------------------------------"
@@ -101,13 +99,13 @@ runs:
           echo "------------------------------------------"
         fi
 
-        # Check if functions coverage is greater than 20%
-        functionsCoverage=$(echo "${coverageData[1]}" | sed 's/%//')
+        # Extract functions coverage (assuming the line starts with "functions")
+        functionsCoverage=$(lcov --list build/coverage.info | grep -i '^functions' | grep -oE '[0-9.]+%' | head -n1 | sed 's/%//')
         echo "Functions coverage is: $functionsCoverage %"
         if ! (( $(echo "$functionsCoverage >= 90" | bc -l) )); then
           echo "---------------------------------------------"
           echo "FAILED: Functions coverage is lower than 90%"
-          echo "--------------------------------------------"
+          echo "---------------------------------------------"
           exit 1
         else
           echo "----------------------------------------------"
