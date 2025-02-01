@@ -85,14 +85,21 @@ runs:
       run: |
         cd "${{ inputs.path }}"
 
-        # Obtain the coverage data
-          coverageData=($(lcov --list build/coverage.info | tail -n1 | grep -oE '[0-9.]+%'))
+        # Obtain the coverage summary data
+        # This should produce output like:
+        #   lines......: 94.6% (533 of 562 lines)
+        #   functions..: 96.8% (126 of 130 functions)
+        #   branches...: 88.0% (110 of 125 branches)
+        coverageData=($(lcov --summary build/coverage.info | grep -oE '[0-9.]+%'))
 
-        echo "Coverage data: ${coverageData[@]}"
+        echo "Coverage summary data: ${coverageData[@]}"
 
-        # Check if lines the coverage is greater than 90%
+        # Extract and clean up the percentages:
+        # We expect coverageData[0] to be lines coverage and coverageData[1] to be functions coverage.
         linesCoverage=$(echo "${coverageData[0]}" | sed 's/%//')
+        functionsCoverage=$(echo "${coverageData[1]}" | sed 's/%//')
         echo "Lines coverage is: $linesCoverage %"
+
         if ! (( $(echo "$linesCoverage > 90" | bc -l) )); then
           echo "----------------------------------------"
           echo "FAILED: Lines coverage is lower than 90%"
@@ -104,13 +111,11 @@ runs:
           echo "------------------------------------------"
         fi
 
-        # Check if functions coverage is greater than 90%
-        functionsCoverage=$(echo "${coverageData[1]}" | sed 's/%//')
         echo "Functions coverage is: $functionsCoverage %"
         if ! (( $(echo "$functionsCoverage > 90" | bc -l) )); then
           echo "---------------------------------------------"
           echo "FAILED: Functions coverage is lower than 90%"
-          echo "--------------------------------------------"
+          echo "---------------------------------------------"
           exit 1
         else
           echo "----------------------------------------------"
