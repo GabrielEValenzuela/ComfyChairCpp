@@ -48,7 +48,7 @@ runs:
         arguments+="--output-file build/coverage.info "
 
         # # Disable branch coverage
-        arguments+="-rc lcov_branch_coverage=0 "
+        arguments+="--no-branch-coverage "
 
         # Include test files
         include_files=""
