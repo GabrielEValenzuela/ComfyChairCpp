@@ -84,7 +84,7 @@ runs:
       shell: bash
       run: |
         cd "${{ inputs.path }}"
-
+        
         # Obtain the coverage summary data
         # This should produce output like:
         #   lines......: 94.6% (533 of 562 lines)
